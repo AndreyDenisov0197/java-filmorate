@@ -17,7 +17,7 @@ public class FilmController {
     private final Map<Integer, Film> allFilms = new HashMap<>();
     private int id = 0;
 
-    @GetMapping("/film")
+    @GetMapping("/films")
     public List<Film> getFilms() {
         return new ArrayList<>(allFilms.values());
     }
@@ -32,7 +32,7 @@ public class FilmController {
         return allFilms.get(id);
     }
 
-    @PutMapping("/film/{id}")
+    @PutMapping("/films/{id}")
     public Film updateFilm(@RequestBody Film film) {
         validate(film);
         if (allFilms.containsKey(id)) {

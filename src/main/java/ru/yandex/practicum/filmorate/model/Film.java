@@ -12,7 +12,5 @@ public class Film {
     private String name;
     private String description;
     private LocalDate releaseDate;
-
-    @Builder.Default
-    private Integer duration = 0;
+    private Integer duration;
 }

@@ -17,12 +17,12 @@ public class UserController {
     private final Map<Integer, User> allUser = new HashMap<>();
     private int id = 0;
 
-    @GetMapping("/user")
+    @GetMapping("/users")
     public List<User> getUsers() {
         return new ArrayList<>(allUser.values());
     }
 
-    @PostMapping("/user")
+    @PostMapping("/users")
     public User addUser(@RequestBody User user) {
         validate(user);
         user.setId(++id);
@@ -32,7 +32,7 @@ public class UserController {
         return allUser.get(id);
     }
 
-    @PutMapping("/user/{id}")
+    @PutMapping("/users/{id}")
     public User updateUser(@RequestBody User user) {
         int id = user.getId();
         validate(user);
