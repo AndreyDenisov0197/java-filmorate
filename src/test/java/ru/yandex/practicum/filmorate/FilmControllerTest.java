@@ -128,4 +128,29 @@ public class FilmControllerTest {
         Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film),
                 "Ошибка отрицательная продолжительность.");
     }
+
+    @Test
+    void checkDurationNull() {
+        Film film = Film.builder()
+                .name("name")
+                .description("description of film")
+                .releaseDate(LocalDate.parse("1995-12-25"))
+                .duration(null)
+                .build();
+
+        Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film),
+                "Ошибка отрицательная продолжительность.");
+    }
+
+    @Test
+    void checkDurationNull1() {
+        Film film = Film.builder()
+                .name("name")
+                .description("description of film")
+                .releaseDate(LocalDate.parse("1995-12-25"))
+                .build();
+
+        Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film),
+                "Ошибка отрицательная продолжительность.");
+    }
 }
