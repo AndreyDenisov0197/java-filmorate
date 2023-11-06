@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController
 public class UserController {
     private final Map<Integer, User> allUser = new HashMap<>();
-    private int id = 1;
+    private int idFilm = 1;
 
     @GetMapping("/users")
     public List<User> getUsers() {
@@ -26,10 +26,10 @@ public class UserController {
     public User addUser(@RequestBody User user) {
         validate(user);
         if (user.getId() == null) {
-            while (allUser.containsKey(id)) {
-                ++id;
+            while (allUser.containsKey(idFilm)) {
+                ++idFilm;
             }
-            user.setId(id);
+            user.setId(idFilm);
         }
 
         int id = user.getId();
@@ -38,9 +38,10 @@ public class UserController {
         return allUser.get(id);
     }
 
-    @PutMapping("/users/{id}")
-    public User updateUser(@PathVariable int id, @RequestBody User user) {
+    @PutMapping("/users") //@PathVariable int id
+    public User updateUser(@RequestBody User user) {
         validate(user);
+        int id = user.getId();
         if (allUser.containsKey(id)) {
             user.setId(id);
             allUser.put(id, user);
