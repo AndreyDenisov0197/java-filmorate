@@ -13,17 +13,16 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/users")
 public class UserController {
     private final Map<Integer, User> allUser = new HashMap<>();
     private int id = 1;
 
-    @GetMapping()
+    @GetMapping("/user")
     public List<User> getUsers() {
         return new ArrayList<>(allUser.values());
     }
 
-    @PostMapping()
+    @PostMapping("/user")
     public User addUser(@RequestBody User user) {
         validate(user);
         if (user.getId() == null) {
@@ -39,7 +38,7 @@ public class UserController {
         return allUser.get(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/user/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         validate(user);
         if (allUser.containsKey(id)) {
