@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -23,7 +24,7 @@ public class FilmController {
     }
 
     @PostMapping("/film")
-    public Film addFilm(@RequestBody  Film film) {
+    public Film addFilm(@Validated @RequestBody  Film film) {
         validate(film);
         film.setId(++id);
         int id = film.getId();
@@ -33,7 +34,7 @@ public class FilmController {
     }
 
     @PutMapping("/film/{id}")
-    public Film updateFilm(@RequestBody Film film) {
+    public Film updateFilm(@Validated @RequestBody Film film) {
         validate(film);
         if (allFilms.containsKey(id)) {
             film.setId(id);
