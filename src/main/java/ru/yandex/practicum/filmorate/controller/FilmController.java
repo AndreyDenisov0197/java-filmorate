@@ -47,6 +47,7 @@ public class FilmController {
             log.info("Обновили фильм: {}", film.getName());
         } else {
             log.warn("Обновление невозможно. Фильм {} не добавлен в коллекцию", film.getName());
+            throw new ValidationException("Обновление невозможно. Фильм " + film.getName() + " не добавлен в коллекцию");
         }
         return allFilms.get(film.getId());
     }
