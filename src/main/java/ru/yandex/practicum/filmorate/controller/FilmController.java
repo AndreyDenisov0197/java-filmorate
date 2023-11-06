@@ -24,7 +24,7 @@ public class FilmController {
     }
 
     @PostMapping("/film")
-    public Film addFilm(@Validated @RequestBody  Film film) {
+    public Film addFilm(@RequestBody  Film film) {
         validate(film);
         film.setId(++id);
         int id = film.getId();
@@ -34,7 +34,7 @@ public class FilmController {
     }
 
     @PutMapping("/film/{id}")
-    public Film updateFilm(@Validated @RequestBody Film film) {
+    public Film updateFilm(@RequestBody Film film) {
         validate(film);
         if (allFilms.containsKey(id)) {
             film.setId(id);
