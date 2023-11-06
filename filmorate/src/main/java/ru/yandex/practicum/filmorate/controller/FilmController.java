@@ -58,7 +58,7 @@ public class FilmController {
         }
 
         LocalDate date = LocalDate.of(1895,12,28);
-        if (date.isAfter(film.getReleaseDate())){
+        if (date.isAfter(film.getReleaseDate())) {
             log.error("Дата релиза раньше 28 декабря 1895 года.");
             throw new ValidationException("Дата релиза раньше 28 декабря 1895 года.");
         }
