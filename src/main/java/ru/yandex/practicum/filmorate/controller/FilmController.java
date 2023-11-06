@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController
 public class FilmController {
     private final Map<Integer, Film> allFilms = new HashMap<>();
-    private int id = 1;
+    private int idFilm = 1;
 
     @GetMapping("/films")
     public List<Film> getFilms() {
@@ -26,10 +26,10 @@ public class FilmController {
     public Film addFilm(@RequestBody  Film film) {
         validate(film);
         if (film.getId() == null) {
-            while (allFilms.containsKey(id)) {
-                ++id;
+            while (allFilms.containsKey(idFilm)) {
+                ++idFilm;
             }
-            film.setId(id);
+            film.setId(idFilm);
         }
         int id = film.getId();
         allFilms.put(id, film);
@@ -37,9 +37,10 @@ public class FilmController {
         return allFilms.get(id);
     }
 
-    @PutMapping("/films/{id}")
-    public Film updateFilm(@PathVariable int id, @RequestBody Film film) {
+    @PutMapping("/films") //@PathVariable int id
+    public Film updateFilm(@RequestBody Film film) {
         validate(film);
+        int id = film.getId();
         if (allFilms.containsKey(id)) {
             film.setId(id);
             allFilms.put(id, film);

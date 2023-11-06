@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController
 public class UserController {
     private final Map<Integer, User> allUser = new HashMap<>();
-    private int idFilm = 1;
+    private int idUser = 1;
 
     @GetMapping("/users")
     public List<User> getUsers() {
@@ -26,10 +26,10 @@ public class UserController {
     public User addUser(@RequestBody User user) {
         validate(user);
         if (user.getId() == null) {
-            while (allUser.containsKey(idFilm)) {
-                ++idFilm;
+            while (allUser.containsKey(idUser)) {
+                ++idUser;
             }
-            user.setId(idFilm);
+            user.setId(idUser);
         }
 
         int id = user.getId();
@@ -48,6 +48,7 @@ public class UserController {
             log.info("Обновили данные пользователя под ID-{}", id);
         } else {
             log.warn("Обновление невозможно. Пользователя под ID-{} не существует", id);
+            throw new ValidationException("Обновление невозможно. Пользователя под ID-" + id + " не существует");
         }
         return allUser.get(id);
     }
