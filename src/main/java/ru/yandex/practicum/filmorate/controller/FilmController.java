@@ -27,7 +27,7 @@ public class FilmController {
     public Film addFilm(@RequestBody  Film film) {
         validate(film);
         if (film.getId() == null) {
-            while (allFilms.containsKey(id)){
+            while (allFilms.containsKey(id)) {
                 ++id;
             }
             film.setId(id);
