@@ -17,7 +17,7 @@ public class UserController {
     private final Map<Integer, User> allUser = new HashMap<>();
     private int id = 1;
 
-    @GetMapping("/user")
+    @GetMapping("/users")
     public List<User> getUsers() {
         return new ArrayList<>(allUser.values());
     }

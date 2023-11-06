@@ -17,7 +17,7 @@ public class FilmController {
     private final Map<Integer, Film> allFilms = new HashMap<>();
     private int id = 1;
 
-    @GetMapping("/film")
+    @GetMapping("/films")
     public List<Film> getFilms() {
         return new ArrayList<>(allFilms.values());
     }
