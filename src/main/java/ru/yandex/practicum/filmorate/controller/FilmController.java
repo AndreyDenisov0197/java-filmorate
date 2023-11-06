@@ -22,7 +22,7 @@ public class FilmController {
         return new ArrayList<>(allFilms.values());
     }
 
-    @PostMapping("/film")
+    @PostMapping("/films")
     public Film addFilm(@RequestBody  Film film) {
         validate(film);
         if (film.getId() == null) {
@@ -37,7 +37,7 @@ public class FilmController {
         return allFilms.get(id);
     }
 
-    @PutMapping("/film/{id}")
+    @PutMapping("/films/{id}")
     public Film updateFilm(@PathVariable int id, @RequestBody Film film) {
         validate(film);
         if (allFilms.containsKey(id)) {

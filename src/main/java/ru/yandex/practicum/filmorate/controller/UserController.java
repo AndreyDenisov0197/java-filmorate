@@ -22,7 +22,7 @@ public class UserController {
         return new ArrayList<>(allUser.values());
     }
 
-    @PostMapping("/user")
+    @PostMapping("/users")
     public User addUser(@RequestBody User user) {
         validate(user);
         if (user.getId() == null) {
@@ -38,7 +38,7 @@ public class UserController {
         return allUser.get(id);
     }
 
-    @PutMapping("/user/{id}")
+    @PutMapping("/users/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         validate(user);
         if (allUser.containsKey(id)) {
