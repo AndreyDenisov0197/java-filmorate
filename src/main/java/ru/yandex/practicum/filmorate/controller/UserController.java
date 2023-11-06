@@ -13,30 +13,37 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@RequestMapping("/users")
 public class UserController {
     private final Map<Integer, User> allUser = new HashMap<>();
-    private int id = 0;
+    private int id = 1;
 
-    @GetMapping("/users")
+    @GetMapping()
     public List<User> getUsers() {
         return new ArrayList<>(allUser.values());
     }
 
-    @PostMapping("/users")
+    @PostMapping()
     public User addUser(@RequestBody User user) {
         validate(user);
-        user.setId(++id);
+        if (user.getId() == null) {
+            while (allUser.containsKey(id)) {
+                ++id;
+            }
+            user.setId(id);
+        }
+
         int id = user.getId();
         allUser.put(id, user);
         log.info("Добавили пользователяс ID-{}", id);
         return allUser.get(id);
     }
 
-    @PutMapping("/users/{id}")
-    public User updateUser(@RequestBody User user) {
-        int id = user.getId();
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable int id, @RequestBody User user) {
         validate(user);
         if (allUser.containsKey(id)) {
+            user.setId(id);
             allUser.put(id, user);
             log.info("Обновили данные пользователя под ID-{}", id);
         } else {

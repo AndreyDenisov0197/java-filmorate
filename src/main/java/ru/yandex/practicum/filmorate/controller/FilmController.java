@@ -13,27 +13,33 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@RequestMapping("/films")
 public class FilmController {
     private final Map<Integer, Film> allFilms = new HashMap<>();
-    private int id = 0;
+    private int id = 1;
 
-    @GetMapping("/films")
+    @GetMapping
     public List<Film> getFilms() {
         return new ArrayList<>(allFilms.values());
     }
 
-    @PostMapping("/film")
+    @PostMapping
     public Film addFilm(@RequestBody  Film film) {
         validate(film);
-        film.setId(++id);
+        if (film.getId() == null) {
+            while (allFilms.containsKey(id)){
+                ++id;
+            }
+            film.setId(id);
+        }
         int id = film.getId();
         allFilms.put(id, film);
         log.info("Фильм {} добавлен", film.getName());
         return allFilms.get(id);
     }
 
-    @PutMapping("/films/{id}")
-    public Film updateFilm(@RequestBody Film film) {
+    @PutMapping("/{id}")
+    public Film updateFilm(@PathVariable int id, @RequestBody Film film) {
         validate(film);
         if (allFilms.containsKey(id)) {
             film.setId(id);
