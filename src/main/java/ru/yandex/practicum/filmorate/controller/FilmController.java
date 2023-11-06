@@ -64,7 +64,7 @@ public class FilmController {
         }
 
         Integer duration = film.getDuration();
-        if (duration <= 0) {
+        if (duration == null || duration <= 0) {
             log.error("Продолжительность фильма отрицательная или равна нулю.");
             throw new ValidationException("Продолжительность фильма отрицательная или равна нулю.");
         }
