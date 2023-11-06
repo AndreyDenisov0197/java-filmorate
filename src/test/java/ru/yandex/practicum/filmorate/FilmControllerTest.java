@@ -24,7 +24,7 @@ public class FilmControllerTest {
                 .name("name")
                 .description("description of film")
                 .releaseDate(LocalDate.parse("1997-01-15"))
-                .duration(150)
+                .duration(190)
                 .build();
 
         Film postFilm = filmController.addFilm(film);
