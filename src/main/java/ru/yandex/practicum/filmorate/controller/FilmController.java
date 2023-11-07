@@ -10,7 +10,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-public class FilmController extends Controller<Film>{
+public class FilmController extends Controller<Film> {
 
     @Override
     @GetMapping("/films")
