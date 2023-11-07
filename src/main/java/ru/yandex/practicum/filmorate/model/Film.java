@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class Film  extends Entity {
+public class Film extends Entity {
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
