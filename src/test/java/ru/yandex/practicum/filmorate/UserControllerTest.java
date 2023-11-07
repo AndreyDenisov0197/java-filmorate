@@ -22,11 +22,12 @@ public class UserControllerTest {
         User user = User.builder()
                 .email("denisov@yandex.ru")
                 .login("login3")
-                .name("name3")
                 .birthday(LocalDate.parse("1997-01-15"))
                 .build();
 
-        User postUser = userController.addUser(user);
+        user.setName("name3");
+
+        User postUser = userController.addFile(user);
         user.setId(1);
         Assertions.assertEquals(user, postUser, "User не совпвдвет");
     }
@@ -36,11 +37,13 @@ public class UserControllerTest {
         User user = User.builder()
                 .email("")
                 .login("login")
-                .name("name")
                 .birthday(LocalDate.parse("1997-01-15"))
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> userController.addUser(user),
+        user.setName("name");
+
+
+        Assertions.assertThrows(ValidationException.class, () -> userController.addFile(user),
                 "Ошибка пустой Email.");
     }
 
@@ -49,11 +52,13 @@ public class UserControllerTest {
         User user = User.builder()
                 .email(null)
                 .login("login1")
-                .name("name1")
                 .birthday(LocalDate.parse("1997-01-15"))
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> userController.addUser(user),
+        user.setName("name1");
+
+
+        Assertions.assertThrows(ValidationException.class, () -> userController.addFile(user),
                 "Ошибка Email null.");
     }
 
@@ -62,11 +67,12 @@ public class UserControllerTest {
         User user = User.builder()
                 .email("denisovad.yandex.ru")
                 .login("login2")
-                .name("name2")
                 .birthday(LocalDate.parse("1997-01-15"))
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> userController.addUser(user),
+        user.setName("name2");
+
+        Assertions.assertThrows(ValidationException.class, () -> userController.addFile(user),
                 "Ошибка Email без @.");
     }
 
@@ -75,11 +81,12 @@ public class UserControllerTest {
         User user = User.builder()
                 .email("   ")
                 .login("login3")
-                .name("name3")
                 .birthday(LocalDate.parse("1997-01-15"))
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> userController.addUser(user),
+        user.setName("name3");
+
+        Assertions.assertThrows(ValidationException.class, () -> userController.addFile(user),
                 "Ошибка пустой Email с пробелами.");
     }
 
@@ -90,11 +97,12 @@ public class UserControllerTest {
         User user = User.builder()
                 .email("denisov@yandex.ru")
                 .login(null)
-                .name("name3")
                 .birthday(LocalDate.parse("1997-01-15"))
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> userController.addUser(user),
+        user.setName("name3");
+
+        Assertions.assertThrows(ValidationException.class, () -> userController.addFile(user),
                 "Ошибка Login == null.");
     }
 
@@ -103,11 +111,12 @@ public class UserControllerTest {
         User user = User.builder()
                 .email("denisov@yandex.ru")
                 .login(" ")
-                .name("name3")
                 .birthday(LocalDate.parse("1997-01-15"))
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> userController.addUser(user),
+        user.setName("name3");
+
+        Assertions.assertThrows(ValidationException.class, () -> userController.addFile(user),
                 "Ошибка пустой Login с пробелами.");
     }
 
@@ -116,11 +125,12 @@ public class UserControllerTest {
         User user = User.builder()
                 .email("denisov@yandex.ru")
                 .login("login")
-                .name("name3")
                 .birthday(LocalDate.now().plusMonths(1))
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> userController.addUser(user),
+        user.setName("name3");
+
+        Assertions.assertThrows(ValidationException.class, () -> userController.addFile(user),
                 "Ошибка день рождение в будущем.");
     }
 
@@ -129,11 +139,12 @@ public class UserControllerTest {
         User user = User.builder()
                 .email("denisov@yandex.ru")
                 .login("login")
-                .name(null)
                 .birthday(LocalDate.parse("1997-01-15"))
                 .build();
 
-        User postUser = userController.addUser(user);
+        user.setName(null);
+
+        User postUser = userController.addFile(user);
         user.setId(1);
         user.setName(user.getLogin());
         Assertions.assertEquals(user, postUser, "User не совпвдвет");
@@ -144,11 +155,12 @@ public class UserControllerTest {
         User user = User.builder()
                 .email("denisov@yandex.ru")
                 .login("login")
-                .name("")
                 .birthday(LocalDate.parse("1997-01-15"))
                 .build();
 
-        User postUser = userController.addUser(user);
+        user.setName("");
+
+        User postUser = userController.addFile(user);
         user.setId(1);
         user.setName(user.getLogin());
         Assertions.assertEquals(user, postUser, "User не совпвдвет");
@@ -159,11 +171,12 @@ public class UserControllerTest {
         User user = User.builder()
                 .email("denisov@yandex.ru")
                 .login("login")
-                .name(" ")
                 .birthday(LocalDate.parse("1997-01-15"))
                 .build();
 
-        User postUser = userController.addUser(user);
+        user.setName("  ");
+
+        User postUser = userController.addFile(user);
         user.setId(1);
         user.setName(user.getLogin());
         Assertions.assertEquals(user, postUser, "User не совпвдвет");

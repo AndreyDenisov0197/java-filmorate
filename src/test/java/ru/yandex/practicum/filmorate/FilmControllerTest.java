@@ -21,13 +21,14 @@ public class FilmControllerTest {
     @Test
     void checkFilm() {
         Film film = Film.builder()
-                .name("name")
                 .description("description of film")
                 .releaseDate(LocalDate.parse("1997-01-15"))
                 .duration(190)
                 .build();
 
-        Film postFilm = filmController.addFilm(film);
+        film.setName("name"); // почему билдер не видет родительский класс????
+
+        Film postFilm = filmController.addFile(film);
         film.setId(1);
         Assertions.assertEquals(film, postFilm, "User не совпвдвет");
     }
@@ -35,46 +36,48 @@ public class FilmControllerTest {
     @Test
     void checkNameNull() {
         Film film = Film.builder()
-                .name(null)
                 .description("description of film")
                 .releaseDate(LocalDate.parse("1997-01-15"))
                 .duration(150)
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film),
+        film.setName(null);
+
+        Assertions.assertThrows(ValidationException.class, () -> filmController.addFile(film),
                 "Ошибка Name == null.");
     }
 
     @Test
     void checkNameBlank() {
         Film film = Film.builder()
-                .name("")
                 .description("description of film")
                 .releaseDate(LocalDate.parse("1997-01-15"))
                 .duration(150)
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film),
+        film.setName("");
+
+        Assertions.assertThrows(ValidationException.class, () -> filmController.addFile(film),
                 "Ошибка пустое поле Name.");
     }
 
     @Test
     void checkNameBlank2() {
         Film film = Film.builder()
-                .name("  ")
                 .description("description of film")
                 .releaseDate(LocalDate.parse("1997-01-15"))
                 .duration(150)
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film),
+        film.setName("   ");
+
+        Assertions.assertThrows(ValidationException.class, () -> filmController.addFile(film),
                 "Ошибка пустое поле Name.");
     }
 
     @Test
     void checkDescription455() {
         Film film = Film.builder()
-                .name("Cheburashka")
                 .description("What the movie is about.\n" +
                         "In Spain, on an orange plantation, farmers are annoyed by a furry beast (actually Cheburashka" +
                         " – but he will take this name only at the end of the film). He loves oranges and devours " +
@@ -85,20 +88,23 @@ public class FilmControllerTest {
                 .duration(150)
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film),
+        film.setName("Cheburashka");
+
+        Assertions.assertThrows(ValidationException.class, () -> filmController.addFile(film),
                 "Ошибка описание слишком длинное.");
     }
 
     @Test
     void checkDateRelease() {
         Film film = Film.builder()
-                .name("name")
                 .description("description of film")
                 .releaseDate(LocalDate.parse("1895-12-25"))
                 .duration(150)
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film),
+        film.setName("name");
+
+        Assertions.assertThrows(ValidationException.class, () -> filmController.addFile(film),
                 "Ошибка Дата релиза раньше с порогового значения.");
     }
 
@@ -106,51 +112,55 @@ public class FilmControllerTest {
     @Test
     void checkDuration0() {
         Film film = Film.builder()
-                .name("name")
                 .description("description of film")
                 .releaseDate(LocalDate.parse("1995-12-25"))
                 .duration(0)
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film),
+        film.setName("name");
+
+        Assertions.assertThrows(ValidationException.class, () -> filmController.addFile(film),
                 "Ошибка продолжительность = 0.");
     }
 
     @Test
     void checkDurationMinus() {
         Film film = Film.builder()
-                .name("name")
                 .description("description of film")
                 .releaseDate(LocalDate.parse("1995-12-25"))
                 .duration(-30)
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film),
+        film.setName("name");
+
+        Assertions.assertThrows(ValidationException.class, () -> filmController.addFile(film),
                 "Ошибка отрицательная продолжительность.");
     }
 
     @Test
     void checkDurationNull() {
         Film film = Film.builder()
-                .name("name")
                 .description("description of film")
                 .releaseDate(LocalDate.parse("1995-12-25"))
                 .duration(null)
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film),
+        film.setName("name");
+
+        Assertions.assertThrows(ValidationException.class, () -> filmController.addFile(film),
                 "Ошибка отрицательная продолжительность.");
     }
 
     @Test
     void checkDurationNull1() {
         Film film = Film.builder()
-                .name("name")
                 .description("description of film")
                 .releaseDate(LocalDate.parse("1995-12-25"))
                 .build();
 
-        Assertions.assertThrows(ValidationException.class, () -> filmController.addFilm(film),
+        film.setName("name");
+
+        Assertions.assertThrows(ValidationException.class, () -> filmController.addFile(film),
                 "Ошибка отрицательная продолжительность.");
     }
 }

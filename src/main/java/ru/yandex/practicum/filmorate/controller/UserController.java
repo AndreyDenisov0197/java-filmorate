@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -13,47 +14,29 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-public class UserController {
-    private final Map<Integer, User> allUser = new HashMap<>();
-    private int idUser = 1;
+public class UserController extends Controller<User>{
 
+    @Override
     @GetMapping("/users")
-    public List<User> getUsers() {
-        return new ArrayList<>(allUser.values());
+    public List<User> getFile() {
+        return super.getFile();
     }
 
+    @Override
     @PostMapping("/users")
-    public User addUser(@RequestBody User user) {
-        validate(user);
-        if (user.getId() == null) {
-            while (allUser.containsKey(idUser)) {
-                ++idUser;
-            }
-            user.setId(idUser);
-        }
-
-        int id = user.getId();
-        allUser.put(id, user);
-        log.info("Добавили пользователяс ID-{}", id);
-        return allUser.get(id);
+    public User addFile(@RequestBody User file) {
+        return super.addFile(file);
     }
 
-    @PutMapping("/users") //@PathVariable int id
-    public User updateUser(@RequestBody User user) {
-        validate(user);
-        int id = user.getId();
-        if (allUser.containsKey(id)) {
-            user.setId(id);
-            allUser.put(id, user);
-            log.info("Обновили данные пользователя под ID-{}", id);
-        } else {
-            log.warn("Обновление невозможно. Пользователя под ID-{} не существует", id);
-            throw new ValidationException("Обновление невозможно. Пользователя под ID-" + id + " не существует");
-        }
-        return allUser.get(id);
+    @Override
+    @PutMapping("/users")
+    public User updateFile(@RequestBody User file) {
+        return super.updateFile(file);
     }
 
-    private void validate(User user) {
+
+    @Override
+    protected void validate(User user) {
         String email = user.getEmail();
         if (email == null || !email.contains("@") || email.isBlank()) {
             log.error("Email пустой или не содержит символ @.");
