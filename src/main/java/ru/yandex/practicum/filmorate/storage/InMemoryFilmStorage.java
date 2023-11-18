@@ -11,7 +11,7 @@ import java.util.Map;
 
 
 @Component
-public class InMemoryFilmStorage implements FilmStorage{
+public class InMemoryFilmStorage implements FilmStorage {
     protected final Map<Integer, Film> allFilm = new HashMap<>();
     protected int index = 1;
 

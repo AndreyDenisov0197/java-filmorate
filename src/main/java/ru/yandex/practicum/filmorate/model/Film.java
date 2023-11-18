@@ -10,7 +10,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-public class Film extends Entity implements Comparable<Film>{
+public class Film extends Entity implements Comparable<Film> {
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
