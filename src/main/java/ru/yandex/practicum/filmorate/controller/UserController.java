@@ -1,37 +1,76 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
-public class UserController extends Controller<User> {
+@RequiredArgsConstructor
+public class UserController {
 
-    @Override
+    private UserService userService;
+
     @GetMapping("/users")
-    public List<User> getFile() {
-        return super.getFile();
+    public List<User> getUser() {
+        log.info("GET /users");
+        return userService.getUser();
     }
 
-    @Override
     @PostMapping("/users")
-    public User addFile(@RequestBody User file) {
-        return super.addFile(file);
+    public User addUser(@RequestBody User user) {
+        log.info("POST /users");
+        validate(user);
+        return userService.addUser(user);
     }
 
-    @Override
     @PutMapping("/users")
-    public User updateFile(@RequestBody User file) {
-        return super.updateFile(file);
+    public User updateUser(@RequestBody User user) {
+        log.info("PUT /users");
+        validate(user);
+        return userService.updateUser(user);
     }
 
+    @GetMapping("/users/{id}")
+    public User getUserById(@PathVariable int id) {
+        log.info("GET /users/{}", id);
+        return userService.getUserByID(id);
+    }
 
-    @Override
+    @PutMapping("/users/{id}/friends/{friendId}")
+    public void addFriends(@PathVariable int id, @PathVariable int friendId) {
+        log.info("/users/{}/friends/{}", id, friendId);
+        userService.addFriends(id, friendId);
+    }
+
+    @DeleteMapping("/users/{id}/friends/{friendId}")
+    public void removeFriends(@PathVariable int id, @PathVariable int friendId) {
+        log.info("/users/{}/friends/{}", id, friendId);
+        userService.removeFriends(id, friendId);
+    }
+
+    @GetMapping("/users/{id}/friends")
+    public List<User> getFriends(@PathVariable int id) {
+        log.info("/users/{}/friends", id);
+        return userService.getFriends(id);
+    }
+
+    @GetMapping("/users/{id}/friends/common/{otherId}")
+    public List<User> getMutualFriends(@PathVariable int id, @PathVariable int otherId) {
+        return userService.getMutualFriends(id, otherId);
+    }
+
     protected void validate(User user) {
         String email = user.getEmail();
         if (email == null || !email.contains("@") || email.isBlank()) {
@@ -57,4 +96,5 @@ public class UserController extends Controller<User> {
             log.warn("Name пустой. Заменили name на login");
         }
     }
+
 }
