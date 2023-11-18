@@ -12,7 +12,7 @@ public interface UserStorage {
 
     List<User> getUser();
 
-    User updateUser(User file);
+    User updateUser(User user);
 
     User getUserByID(int id);
 }

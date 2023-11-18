@@ -20,6 +20,7 @@ public class InMemoryUserStorage implements UserStorage {
     public List<User> getUser() {
         return new ArrayList<>(allUser.values());
     }
+
     @Override
     public User getUserByID(int id) {
         User user = allUser.get(id);
@@ -30,33 +31,33 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void deleteUser(User User) {
-        Integer id = User.getId();
+    public void deleteUser(User user) {
+        Integer id = user.getId();
         allUser.remove(id);
     }
 
     @Override
-    public User addUser(@RequestBody User User) {
-        if (User.getId() == null) {
+    public User addUser(@RequestBody User user) {
+        if (user.getId() == null) {
             while (allUser.containsKey(index)) {
                 ++index;
             }
-            User.setId(index);
+            user.setId(index);
         }
-        int id = User.getId();
-        allUser.put(id, User);
+        int id = user.getId();
+        allUser.put(id, user);
         return allUser.get(id);
     }
 
     @Override
-    public User updateUser(User User) {
-        int id = User.getId();
+    public User updateUser(User user) {
+        int id = user.getId();
         if (allUser.containsKey(id)) {
-            User.setId(id);
-            allUser.put(id, User);
+            user.setId(id);
+            allUser.put(id, user);
         } else {
-            throw new ValidationException("Обновление невозможно. " + User.getName() + " не добавлен в коллекцию");
+            throw new ValidationException("Обновление невозможно. " + user.getName() + " не добавлен в коллекцию");
         }
-        return allUser.get(User.getId());
+        return allUser.get(user.getId());
     }
 }
