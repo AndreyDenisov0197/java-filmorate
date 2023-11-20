@@ -14,11 +14,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FilmService {
     private final FilmStorage filmStorage;
+    private final UserService userService;
 
     public void addLike(int id, int userId) {
         Film film = filmStorage.getFilmByID(id);
         if (film == null) {
             throw new ObjectNotFoundException(String.format("Фильма с ID=%d не существует", id));
+        }
+
+        if (userService.getUserByID(userId) == null) {
+            throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", userId));
         }
         film.addLike(userId);
     }
@@ -28,6 +33,10 @@ public class FilmService {
         if (film == null) {
             throw new ObjectNotFoundException(String.format("Фильма с ID=%d не существует", id));
         }
+        if (userService.getUserByID(userId) == null) {
+            throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", userId));
+        }
+
         film.removeLike(userId);
     }
 
