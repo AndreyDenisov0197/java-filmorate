@@ -14,7 +14,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private UserStorage userStorage;
+    private final UserStorage userStorage;
 
     public void addFriends(int id, int friendId) {
         User user = userStorage.getUserByID(id);

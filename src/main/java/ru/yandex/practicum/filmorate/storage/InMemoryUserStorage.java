@@ -37,7 +37,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User addUser(@RequestBody User user) {
+    public User addUser(User user) {
         if (user.getId() == null) {
             while (allUser.containsKey(index)) {
                 ++index;

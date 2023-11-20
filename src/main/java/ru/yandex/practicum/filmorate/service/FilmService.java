@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FilmService {
-    private FilmStorage filmStorage;
+    private final FilmStorage filmStorage;
 
     public void addLike(int id, int userId) {
         Film film = filmStorage.getFilmByID(id);

@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FilmController {
 
-    private FilmService filmService;
+    private final FilmService filmService;
 
     @GetMapping("/films")
     public List<Film> getFilm() {
