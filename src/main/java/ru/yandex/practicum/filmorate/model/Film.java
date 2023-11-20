@@ -9,12 +9,22 @@ import java.util.Set;
 
 @Getter
 @Setter
-@Builder
 public class Film extends Entity implements Comparable<Film> {
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
+
+    @Builder
+    public Film(String name, String description, LocalDate releaseDate, Integer duration) {
+        super(name);
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+    }
+
     private Set<Integer> like;
+
+
 
     public void addLike(Integer id) {
         like.add(id);
