@@ -1,27 +1,19 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
 @Setter
+@SuperBuilder
 public class Film extends Entity implements Comparable<Film> {
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
-
-    @Builder
-    public Film(String name, String description, LocalDate releaseDate, Integer duration) {
-        super(name);
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.duration = duration;
-    }
-
     private Set<Integer> like;
 
 
