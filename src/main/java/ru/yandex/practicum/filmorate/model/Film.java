@@ -35,6 +35,6 @@ public class Film extends Entity implements Comparable<Film> {
 
     @Override
     public int compareTo(Film o) {
-        return this.getLike().size() - o.getLike().size();
+        return o.getLike().size() - this.getLike().size();
     }
 }
