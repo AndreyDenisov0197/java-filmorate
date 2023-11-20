@@ -32,15 +32,15 @@ public class FilmService {
     }
 
     public List<Film> getTop10Films(int n) {
-        List<Film> films = filmStorage.getFilm();
-        Collections.sort(films);
-        ArrayList<Film> topFilm = new ArrayList<>();
+        List<Film> filmList = filmStorage.getFilm();
+        Collections.sort(filmList);
+        ArrayList<Film> film = new ArrayList<>();
 
         for (int i = 0; i < (n); i++) {
-            topFilm.add(films.get(i));
+            film.add(filmList.get(i));
         }
 
-        return topFilm;
+        return film;
     }
 
 

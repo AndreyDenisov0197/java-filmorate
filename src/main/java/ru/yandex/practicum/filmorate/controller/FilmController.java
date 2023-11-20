@@ -30,6 +30,12 @@ public class FilmController {
         return filmService.addFilm(film);
     }
 
+    @GetMapping("/films/{id}")
+    public Film getFilmById(@PathVariable int id) {
+        log.info("GET /films/{}", id);
+        return filmService.getFilmByID(id);
+    }
+
     @PutMapping("/films")
     public Film updateFilm(@RequestBody Film film) {
         log.info("PUT /films");
