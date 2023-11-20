@@ -21,12 +21,12 @@ public class UserService {
         if (user == null) {
             throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", id));
         }
-        user.addFriends(friendId);
 
         User friends = userStorage.getUserByID(friendId);
         if (friends == null) {
             throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", friendId));
         }
+        user.addFriends(friendId);
         friends.addFriends(id);
     }
 
