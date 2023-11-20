@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.storage;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class InMemoryUserStorage implements UserStorage {
             user.setId(id);
             allUser.put(id, user);
         } else {
-            throw new ValidationException("Обновление невозможно. " + user.getName() + " не добавлен в коллекцию");
+            throw new RuntimeException("Обновление невозможно. " + user.getName() + " не добавлен в коллекцию");
         }
         return allUser.get(user.getId());
     }

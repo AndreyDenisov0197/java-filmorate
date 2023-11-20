@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -21,6 +22,7 @@ public class Film extends Entity implements Comparable<Film> {
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
+        this.like = new HashSet<>();
     }
 
     public void addLike(Integer id) {

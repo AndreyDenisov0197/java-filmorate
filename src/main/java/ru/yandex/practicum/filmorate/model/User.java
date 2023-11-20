@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Setter
@@ -21,6 +22,7 @@ public class User extends Entity {
         this.email = email;
         this.login = login;
         this.birthday = birthday;
+        this.friends = new HashSet<>();
     }
 
     public void addFriends(Integer id) {
