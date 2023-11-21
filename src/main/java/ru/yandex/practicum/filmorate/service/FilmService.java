@@ -44,6 +44,9 @@ public class FilmService {
         List<Film> filmList = filmStorage.getFilm();
         Collections.sort(filmList);
         List<Film> film = new ArrayList<>();
+        if (n > filmList.size()) {
+            n = filmList.size();
+        }
 
         for (int i = 0; i < (n); i++) {
             film.add(filmList.get(i));
