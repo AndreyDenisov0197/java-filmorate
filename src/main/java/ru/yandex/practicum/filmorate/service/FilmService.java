@@ -43,7 +43,7 @@ public class FilmService {
     public List<Film> getTop10Films(int n) {
         List<Film> filmList = filmStorage.getFilm();
         Collections.sort(filmList);
-        ArrayList<Film> film = new ArrayList<>();
+        List<Film> film = new ArrayList<>();
 
         for (int i = 0; i < (n); i++) {
             film.add(filmList.get(i));
