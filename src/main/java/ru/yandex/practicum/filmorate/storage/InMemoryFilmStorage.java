@@ -61,6 +61,6 @@ public class InMemoryFilmStorage implements FilmStorage {
         if (film == null) {
             throw new ObjectNotFoundException(String.format("Фильма с ID=%d не существует", id));
         }
-        return allFilm.get(id);
+        return film;
     }
 }

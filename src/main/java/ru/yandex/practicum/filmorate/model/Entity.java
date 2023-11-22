@@ -7,11 +7,9 @@ import lombok.Setter;
 @Setter
 public abstract class Entity {
     protected Integer id;
+    protected String name;
 
     public Entity(String name) {
         this.name = name;
     }
-
-    protected String name;
-
 }

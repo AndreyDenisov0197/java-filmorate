@@ -29,7 +29,7 @@ public class ExceptionHandle {
     }
 
     @ExceptionHandler
-    public ResponseEntity<Map<String, String>> appearedException(final IOException e) {
+    public ResponseEntity<Map<String, String>> appearedException(final Throwable e) {
         return new ResponseEntity<>(
                 Map.of("Возникло исключение", e.getMessage()),
                 HttpStatus.INTERNAL_SERVER_ERROR
