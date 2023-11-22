@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 
-import java.io.IOException;
 import java.util.Map;
 
 @RestControllerAdvice("ru.yandex.practicum.filmorate.controller")
