@@ -19,6 +19,7 @@ public class ExceptionHandle {
         log.info("500 {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse errorValidation(final ValidationException e) {
