@@ -6,15 +6,16 @@ import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class FilmService {
     private final FilmStorage filmStorage;
     private final UserService userService;
+    public static final Comparator<Film> FILM_COMPARATOR = Comparator.comparingLong(Film::getRate).reversed();
 
     public void addLike(int id, int userId) {
         Film film = filmStorage.getFilmByID(id);
@@ -40,21 +41,12 @@ public class FilmService {
         film.removeLike(userId);
     }
 
-    public List<Film> getTop10Films(int n) {
-        List<Film> filmList = filmStorage.getFilm();
-        Collections.sort(filmList);
-        List<Film> film = new ArrayList<>();
-        if (n > filmList.size()) {
-            n = filmList.size();
-        }
-
-        for (int i = 0; i < (n); i++) {
-            film.add(filmList.get(i));
-        }
-
-        return film;
+    public List<Film> getTop10Films(int count) {
+        return filmStorage.getFilm().stream()
+                .sorted(FILM_COMPARATOR)
+                .limit(count)
+                .collect(Collectors.toList());
     }
-
 
     public List<Film> getFilm() {
         return filmStorage.getFilm();

@@ -1,37 +1,35 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.yandex.practicum.filmorate.exception.ErrorResponse;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 
-import java.util.Map;
-
+@Slf4j
 @RestControllerAdvice("ru.yandex.practicum.filmorate.controller")
 public class ExceptionHandle {
-    @ExceptionHandler
-    public ResponseEntity<Map<String, String>> errorValidation(final ValidationException e) {
-        return new ResponseEntity<>(
-                Map.of("Ошибка валидации", e.getMessage()),
-                HttpStatus.BAD_REQUEST
-        );
-    }
 
-    @ExceptionHandler // внедрить это исключение в Film
-    public ResponseEntity<Map<String, String>> objectNotFound(final ObjectNotFoundException e) {
-        return new ResponseEntity<>(
-                Map.of("Объект не найден", e.getMessage()),
-                HttpStatus.NOT_FOUND
-        );
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleThrowable(final Throwable e) {
+        log.info("500 {}", e.getMessage(), e);
+        return new ErrorResponse(e.getMessage());
+    }
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse errorValidation(final ValidationException e) {
+        log.info("400 {}", e.getMessage());
+        return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
-    public ResponseEntity<Map<String, String>> appearedException(final Throwable e) {
-        return new ResponseEntity<>(
-                Map.of("Возникло исключение", e.getMessage()),
-                HttpStatus.INTERNAL_SERVER_ERROR
-        );
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse objectNotFound(final ObjectNotFoundException e) {
+        log.info("404 {}", e.getMessage());
+        return new ErrorResponse(e.getMessage());
     }
 }

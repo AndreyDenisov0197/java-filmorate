@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class Film extends Entity implements Comparable<Film> {
+public class Film extends Entity{
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
@@ -33,8 +33,7 @@ public class Film extends Entity implements Comparable<Film> {
         like.remove(id);
     }
 
-    @Override
-    public int compareTo(Film o) {
-        return o.getLike().size() - this.getLike().size();
+    public long getRate() {
+        return like.size();
     }
 }
