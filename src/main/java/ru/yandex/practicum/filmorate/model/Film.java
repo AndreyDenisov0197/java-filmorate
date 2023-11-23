@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class Film extends Entity{
+public class Film extends Entity {
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
