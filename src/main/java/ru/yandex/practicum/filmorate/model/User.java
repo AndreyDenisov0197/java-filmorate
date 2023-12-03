@@ -15,6 +15,8 @@ public class User extends Entity {
     private String login;
     private LocalDate birthday;
     private Set<Integer> friends;
+    //private boolean statusFriends; // я бы занес это поле в таблицу friends
+
 
     @Builder
     public User(String name, String email, String login, LocalDate birthday) {

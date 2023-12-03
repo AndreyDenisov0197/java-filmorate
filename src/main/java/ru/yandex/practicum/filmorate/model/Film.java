@@ -15,6 +15,8 @@ public class Film extends Entity {
     private LocalDate releaseDate;
     private Integer duration;
     private Set<Integer> like;
+    //private Set<String> genre; // вопрос какой указать тип?
+    //private String rating; // вопрос какой указать тип?
 
     @Builder
     public Film(String name, String description, LocalDate releaseDate, Integer duration) {
