@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS films (
     release_date DATE         NOT NULL,
     duration     INT          NOT NULL,
     mpa_id    INT ,
-    FOREIGN KEY (rating_id)  REFERENCES rating (id)
+    FOREIGN KEY (mpa_id)  REFERENCES mpa (id)
 );
 
 CREATE TABLE IF NOT EXISTS genre_to_film (
