@@ -115,7 +115,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Genre> getGenresList() {
-        String sql = "SELECT * FROM genres;";
+        String sql = "SELECT * FROM genres ORDER BY id;";
         List<Genre> genres = new ArrayList<>();
 
         List<Map<String,Object>> list = jdbcTemplate.queryForList(sql);
@@ -137,7 +137,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Mpa> getMpaList() {
-        String sql = "SELECT * FROM mpa;";
+        String sql = "SELECT * FROM mpa ORDER BY id;";
         List<Mpa> mpas = new ArrayList<>();
 
         List<Map<String,Object>> list = jdbcTemplate.queryForList(sql);
