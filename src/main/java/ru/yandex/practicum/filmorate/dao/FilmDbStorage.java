@@ -102,7 +102,7 @@ public class FilmDbStorage implements FilmStorage {
 
         String sql = "SELECT gf.genre_id AS id, g.name AS name " +
                 "FROM genre_to_film AS gf " +
-                "LEFT JOIN genre AS g ON gf.genre_id = g.genre_id " +
+                "LEFT JOIN genres AS g ON gf.genre_id = g.id " +
                 "WHERE gf.film_id = ?";
 
         List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, id);
