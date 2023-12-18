@@ -25,22 +25,23 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class FilmDbStorageTest {
     private final JdbcTemplate jdbcTemplate;
     private FilmDbStorage filmDbStorage;
+    private Set<Genre> genres;
 
 
 
     @BeforeEach
     public void beforeEach() {
         filmDbStorage = new FilmDbStorage(jdbcTemplate);
-
+        genres = new HashSet<>();
+        genres.add(new Genre(2, "Драма"));
+        genres.add(new Genre(5, "Документальный"));
     }
 
     @Test
     public void testFindFilmById() {
+
         Film film = new Film("Film1", "descriplion",
-                LocalDate.of(1990, 1, 1), 144, new Mpa(1));
-        Set<Genre> genres = new HashSet<>();
-        genres.add(new Genre(6, "Боевик"));
-        film.setGenre(genres);
+                LocalDate.of(1990, 1, 1), 144, new Mpa(1), genres);
 
         Film filmAdd = filmDbStorage.addFilm(film);
         Film film1 = filmDbStorage.getFilmByID(filmAdd.getId());
@@ -57,10 +58,7 @@ public class FilmDbStorageTest {
     @Test
     public void testDeleteFilm() {
         Film film = new Film("Film1", "descriplion",
-                LocalDate.of(1990, 1, 1), 144, new Mpa(1));
-        Set<Genre> genres = new HashSet<>();
-        genres.add(new Genre(6, "Боевик"));
-        film.setGenre(genres);
+                LocalDate.of(1990, 1, 1), 144, new Mpa(1), genres);
 
         Film filmAdd = filmDbStorage.addFilm(film);
         Film film1 = filmDbStorage.getFilmByID(filmAdd.getId());
@@ -81,10 +79,7 @@ public class FilmDbStorageTest {
     @Test
     public void testUpdateFilms() {
         Film film = new Film("Film1", "descriplion",
-                LocalDate.of(1990, 1, 1), 144, new Mpa(1));
-        Set<Genre> genres = new HashSet<>();
-        genres.add(new Genre(6, "Боевик"));
-        film.setGenre(genres);
+                LocalDate.of(1990, 1, 1), 144, new Mpa(1), genres);
 
         Film filmAdd = filmDbStorage.addFilm(film);
         Film film1 = filmDbStorage.getFilmByID(filmAdd.getId());
@@ -103,15 +98,10 @@ public class FilmDbStorageTest {
     @Test
     public void testGetUsers() {
         Film film1 = new Film("Film1", "descriplion",
-                LocalDate.of(1990, 1, 1), 144, new Mpa(1));
-        Set<Genre> genres = new HashSet<>();
-        genres.add(new Genre(6, "Боевик"));
-        film1.setGenre(genres);
+                LocalDate.of(1990, 1, 1), 144, new Mpa(1), genres);
 
         Film film2 = new Film("Film1", "descriplion",
-                LocalDate.of(1990, 1, 1), 144, new Mpa(1));
-        genres.add(new Genre(2, "Драма"));
-        film2.setGenre(genres);
+                LocalDate.of(1990, 1, 1), 144, new Mpa(1), genres);
 
         filmDbStorage.addFilm(film1);
         filmDbStorage.addFilm(film2);
