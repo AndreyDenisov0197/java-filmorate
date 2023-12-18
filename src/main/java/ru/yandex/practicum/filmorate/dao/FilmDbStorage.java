@@ -114,7 +114,7 @@ public class FilmDbStorage implements FilmStorage {
             return film;
 
         } catch (EmptyResultDataAccessException e) {
-            throw new ObjectNotFoundException(String.format("User с ID=%d не существует", id));
+            throw new ObjectNotFoundException(String.format("Film с ID=%d не существует", id));
         }
     }
 
@@ -136,8 +136,12 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Genre getGenreById(int id) {
-        String sql = "SELECT * FROM genres WHERE id = ?;";
-        return jdbcTemplate.queryForObject(sql, getGenreMapper(), id);
+        try {
+            String sql = "SELECT * FROM genres WHERE id = ?;";
+            return jdbcTemplate.queryForObject(sql, getGenreMapper(), id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ObjectNotFoundException(String.format("Жанра с ID=%d не существует", id));
+        }
     }
 
     @Override
@@ -158,8 +162,12 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Mpa getMpaById(int id) {
-        String sql = "SELECT * FROM mpa WHERE id = ?;";
-        return jdbcTemplate.queryForObject(sql, getMpaMapper(), id);
+        try {
+            String sql = "SELECT * FROM mpa WHERE id = ?;";
+            return jdbcTemplate.queryForObject(sql, getMpaMapper(), id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ObjectNotFoundException(String.format("Рейтинга с ID=%d не существует", id));
+        }
     }
 
     private RowMapper<Mpa> getMpaMapper() {
