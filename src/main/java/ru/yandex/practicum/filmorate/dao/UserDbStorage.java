@@ -106,26 +106,26 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public void updateFriends(User user) {
-        Set<Integer> friends = user.getFriends();
+        Set<User> friends = user.getFriends();
         int id = user.getId();
 
         if (friends.isEmpty()) {
             return;
         }
 
-        for (int friendId : friends) {
+        for (User u : friends) {
             String sqlQuery = "SELECT status FROM friends WHERE user_id = ? AND friend_id = ?;";
-            boolean status = Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery, Boolean.class, friendId, id));
+            boolean status = Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery, Boolean.class, u.getId(), id));
 
             if (status) {
                 String sql = "MERGE INTO friends (user_id, friend_id, status) " +
                         "VALUES (?, ?, true)";
-                jdbcTemplate.update(sql, id, friendId);
-                jdbcTemplate.update(sql, friendId, id);
+                jdbcTemplate.update(sql, id, u.getId());
+                jdbcTemplate.update(sql, u.getId(), id);
             } else {
                 String sql = "MERGE INTO friends (user_id, friend_id, status) " +
                         "VALUES (?, ?, false)";
-                jdbcTemplate.update(sql, id, friendId);
+                jdbcTemplate.update(sql, id, u.getId());
             }
         }
     }
@@ -141,8 +141,16 @@ public class UserDbStorage implements UserStorage {
 
     private void getFriends(User user) {
         int id = user.getId();
-        List<Integer> friends = jdbcTemplate.queryForList(
+        List<Integer> friendsList = jdbcTemplate.queryForList(
                 "SELECT friend_id FROM friends WHERE user_id = ?;", Integer.class, id);
+
+        List<User> friends = new ArrayList<>();
+        for (int friendId : friendsList) {
+            User userFriends = getUserByID(friendId);
+            if (userFriends != null) {
+                friends.add(userFriends);
+            }
+        }
         user.setFriends(new HashSet<>(friends));
     }
 
