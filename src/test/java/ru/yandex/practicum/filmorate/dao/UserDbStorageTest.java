@@ -31,7 +31,7 @@ class UserDbStorageTest {
     @Test
     public void testFindUserById() {
         // Подготавливаем данные для теста
-        User newUser = new User("Ivan Petrov", "user@email.ru", "vanya123",
+        User newUser = new User("vanya123", "Ivan Petrov", "user@email.ru",
                 LocalDate.of(1990, 1, 1));
         User user1 = userStorage.addUser(newUser); //тауже протестировали в данном методе
 
@@ -47,7 +47,7 @@ class UserDbStorageTest {
 
     @Test
     public void testDeleteUser() {
-        User newUser = new User("Ivan Denisov", "user3@email.ru", "vanya000",
+        User newUser = new User("vanya000", "Ivan Denisov", "user3@email.ru",
                 LocalDate.of(1991, 11, 12));
 
         User user1 = userStorage.addUser(newUser);
@@ -62,17 +62,17 @@ class UserDbStorageTest {
         userStorage.deleteUser(savedUser);
 
         Assertions.assertThrows(EmptyResultDataAccessException.class, () -> {
-            userStorage.getUserByID(1);
+            userStorage.getUserByID(user1.getId());
         });
     }
 
     @Test
     public void testGetUsers() {
-        User user1 = new User("Ivan Denisov", "user3@email.ru", "vanya000",
+        User user1 = new User("vanya000", "Ivan Denisov", "user3@email.ru",
                 LocalDate.of(1991, 11, 12));
-        User user2 = new User("Ivan Petrov", "user@email.ru", "vanya123",
+        User user2 = new User("vanya123", "Ivan Petrov", "user@email.ru",
                 LocalDate.of(1990, 1, 1));
-        User user3 = new User("Andrey Petrov", "user1@email.ru", "vanya3123",
+        User user3 = new User("vanya3123", "Andrey Petrov", "user1@email.ru",
                 LocalDate.of(1999, 5, 21));
         userStorage.addUser(user1);
         userStorage.addUser(user2);
@@ -93,7 +93,7 @@ class UserDbStorageTest {
 
     @Test
     public void testUpdateUser() {
-        User user1 = new User("Ivan Denisov", "user3@email.ru", "vanya000",
+        User user1 = new User("vanya000", "Ivan Denisov", "user3@email.ru",
                 LocalDate.of(1991, 11, 12));
         User userAdd = userStorage.addUser(user1);
 

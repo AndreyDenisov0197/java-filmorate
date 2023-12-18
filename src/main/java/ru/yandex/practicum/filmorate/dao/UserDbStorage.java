@@ -46,13 +46,19 @@ public class UserDbStorage implements UserStorage {
             Date date = (Date) rs.get("birthday");
             LocalDate localDate = new java.sql.Date(date.getTime()).toLocalDate();
 
-            User user = new User(
+           /* User user = new User(
                     (String) rs.get("name"),
                     (String) rs.get("email"),
                     (String) rs.get("login"),
                     localDate
-            );
+            );*/
 
+            User user = new User(
+                    (String) rs.get("login"),
+                    (String) rs.get("name"),
+                    (String) rs.get("email"),
+                    localDate
+            );
             user.setId((Integer) rs.get("id"));
             getFriends(user);
             users.add(user);
@@ -65,7 +71,7 @@ public class UserDbStorage implements UserStorage {
     public User updateUser(User user) {
         int id = user.getId();
 
-        String sqlQuery = "UPDATE users SET " +
+        /*String sqlQuery = "UPDATE users SET " +
                 "name = ?, email = ?, login = ?, " +
                 "birthday = ? WHERE id = ?";
 
@@ -73,6 +79,17 @@ public class UserDbStorage implements UserStorage {
                 user.getName(),
                 user.getEmail(),
                 user.getLogin(),
+                user.getBirthday(),
+                id);*/
+
+        String sqlQuery = "UPDATE users SET " +
+                "login = ?, name = ?, email = ?, " +
+                "birthday = ? WHERE id = ?";
+
+        int result = jdbcTemplate.update(sqlQuery,
+                user.getLogin(),
+                user.getName(),
+                user.getEmail(),
                 user.getBirthday(),
                 id);
 
@@ -122,9 +139,9 @@ public class UserDbStorage implements UserStorage {
 
     private static Map<String, Object> userToMap(User user) {
         return Map.of(
+                "login", user.getLogin(),
                 "name", user.getName(),
                 "email", user.getEmail(),
-                "login", user.getLogin(),
                 "birthday", Date.valueOf(user.getBirthday())
         );
     }
@@ -138,9 +155,16 @@ public class UserDbStorage implements UserStorage {
 
     private static RowMapper<User> getFilmMapper() {
         return (rs, rowNum) -> {
-            User user = new User(rs.getString("name"),
+            /*User user = new User(rs.getString("name"),
                     rs.getString("email"),
                     rs.getString("login"),
+                    rs.getDate("birthday").toLocalDate()
+            );*/
+
+            User user = new User(
+                    rs.getString("login"),
+                    rs.getString("name"),
+                    rs.getString("email"),
                     rs.getDate("birthday").toLocalDate()
             );
             user.setId(rs.getInt("id"));

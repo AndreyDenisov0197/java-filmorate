@@ -18,8 +18,17 @@ public class User extends Entity {
     //private boolean statusFriends; // я бы занес это поле в таблицу friends
 
 
-    @Builder
+   /* @Builder
     public User(String name, String email, String login, LocalDate birthday) {
+        super(name);
+        this.email = email;
+        this.login = login;
+        this.birthday = birthday;
+        this.friends = new HashSet<>();
+    }*/
+
+    @Builder
+    public User(String login, String name, String email, LocalDate birthday) {
         super(name);
         this.email = email;
         this.login = login;
@@ -27,14 +36,14 @@ public class User extends Entity {
         this.friends = new HashSet<>();
     }
 
-    @Builder
+/*    @Builder
     public User(int id, String name, String email, String login, LocalDate birthday) {
         super(id, name);
         this.email = email;
         this.login = login;
         this.birthday = birthday;
         this.friends = new HashSet<>();
-    }
+    }*/
     /*public User setId(int id) {
         this.id = id;
         return this;
