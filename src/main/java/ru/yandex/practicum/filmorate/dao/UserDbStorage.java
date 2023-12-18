@@ -46,13 +46,6 @@ public class UserDbStorage implements UserStorage {
             Date date = (Date) rs.get("birthday");
             LocalDate localDate = new java.sql.Date(date.getTime()).toLocalDate();
 
-           /* User user = new User(
-                    (String) rs.get("name"),
-                    (String) rs.get("email"),
-                    (String) rs.get("login"),
-                    localDate
-            );*/
-
             User user = new User(
                     (String) rs.get("login"),
                     (String) rs.get("name"),
