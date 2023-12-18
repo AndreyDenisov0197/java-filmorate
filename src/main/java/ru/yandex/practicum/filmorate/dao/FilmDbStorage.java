@@ -154,7 +154,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private RowMapper<Mpa> getMpaMapper() {
-        return ((rs, rowNum) -> new Mpa (rs.getInt("id"), rs.getString("name")));
+        return ((rs, rowNum) -> new Mpa(rs.getInt("id"), rs.getString("name")));
     }
 
     private static RowMapper<Genre> getGenreMapper() {
