@@ -12,7 +12,7 @@ public class Genre {
         this.name = name;
     }
 
-    public Genre(Integer id) {
+/*    public Genre(Integer id) {
         this.id = id;
-    }
+    }*/
 }
