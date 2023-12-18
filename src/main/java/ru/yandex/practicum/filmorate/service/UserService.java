@@ -28,7 +28,7 @@ public class UserService {
         if (friends == null) {
             throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", friendId));
         }
-        user.addFriends(friendId);
+        user.addFriends(friends);
         userStorage.updateFriends(user);
     }
 
@@ -37,7 +37,13 @@ public class UserService {
         if (user == null) {
             throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", id));
         }
-        user.removeFriends(friendId);
+
+        User friends = userStorage.getUserByID(friendId);
+        if (friends == null) {
+            throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", friendId));
+        }
+
+        user.removeFriends(friends);
 /*
         User friends = userStorage.getUserByID(friendId);
         if (friends == null) {
@@ -47,20 +53,22 @@ public class UserService {
         userStorage.updateFriends(user);
     }
 
-    public List<User> getFriends(int id) { // стоит ли вывести друзей через метод UserDbStorage.getFriends(User user)
+    public List<User> getFriends(int id) {
         User user = userStorage.getUserByID(id);
 
         if (user == null) {
             throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", id));
         }
 
+        return new ArrayList<>(user.getFriends());
+/*
         List<User> friends = new ArrayList<>();
 
         for (int friendId : user.getFriends()) {
             friends.add(userStorage.getUserByID(friendId));
         }
 
-        return friends;
+        return friends;*/
     }
 
     public List<User> getMutualFriends(int id, int otherId) {
@@ -74,13 +82,13 @@ public class UserService {
             throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", otherId));
         }
 
-        Set<Integer> users = user1.getFriends();
-        Set<Integer> otherUsers = user2.getFriends();
+        Set<User> users = user1.getFriends();
+        Set<User> otherUsers = user2.getFriends();
         List<User> friends = new ArrayList<>();
 
-        for (int userId : users) {
-            if (otherUsers.contains(userId)) {
-                friends.add(userStorage.getUserByID(userId));
+        for (User u : users) {
+            if (otherUsers.contains(u)) {
+                friends.add(u);
             }
         }
         return friends;

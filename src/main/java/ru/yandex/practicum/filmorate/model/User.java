@@ -14,7 +14,7 @@ public class User extends Entity {
     private String email;
     private String login;
     private LocalDate birthday;
-    private Set<Integer> friends;
+    private Set<User> friends;
     //private boolean statusFriends; // я бы занес это поле в таблицу friends
 
 
@@ -49,11 +49,11 @@ public class User extends Entity {
         return this;
     }*/
 
-    public void addFriends(Integer id) {
-        friends.add(id);
+    public void addFriends(User user) {
+        friends.add(user);
     }
 
-    public void removeFriends(Integer id) {
-        friends.remove(id);
+    public void removeFriends(User user) {
+        friends.remove(user);
     }
 }
