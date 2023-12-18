@@ -90,31 +90,12 @@ public class FilmDbStorage implements FilmStorage {
                     );
                     int id = (Integer) rs.get("id");
                     film.setId(id);
-                    film.setLike(getLikes(id));
-                    film.setGenre(getGenreHashSet(id));
+                    getGenresAndLikes(film);
                     films.add(film);
                 });
         return films;
     }
 
-    private Set<Genre> getGenreHashSet(int id) {
-        Set<Genre> genres = new HashSet<>();
-
-        String sql = "SELECT gf.genre_id AS id, g.name AS name " +
-                "FROM genre_to_film AS gf " +
-                "LEFT JOIN genres AS g ON gf.genre_id = g.id " +
-                "WHERE gf.film_id = ?";
-
-        List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, id);
-        list.forEach(rs -> {
-            Genre genre = new Genre(
-                    (Integer) rs.get("id"),
-                    (String) rs.get("name")
-            );
-            genres.add(genre);
-        });
-        return genres;
-    }
 
     @Override
     public Film getFilmByID(Integer id) {
@@ -126,8 +107,7 @@ public class FilmDbStorage implements FilmStorage {
                         "LEFT JOIN mpa AS r ON f.mpa_id = r.id " +
                         "WHERE f.id = ?;", getFilmMapper(), id);
         if (film != null) {
-            film.setLike(getLikes(id));
-            film.setGenre(getGenreHashSet(id));
+            getGenresAndLikes(film);
             return film;
         }
         return null;
@@ -186,10 +166,24 @@ public class FilmDbStorage implements FilmStorage {
     }
 
 
-    private Set<Integer> getLikes(int id) {
+    private void getGenresAndLikes(Film film) {
+        int id = film.getId();
         List<Integer> like = jdbcTemplate.queryForList(
                 "SELECT user_id FROM likes WHERE film_id = ?;", Integer.class, id);
-        return new HashSet<>(like);
+
+        String sql = "SELECT gf.genre_id, g.name " +
+                "FROM genre_to_film AS gf " +
+                "LEFT JOIN genres AS g ON gf.genre_id = g.id " +
+                "WHERE gf.film_id = ?;";
+
+        List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, id);
+        List<Genre> genres = new ArrayList<>();
+        list.forEach(m -> {
+            Genre genre = new Genre((Integer)m.get("genre_id"), (String)m.get("name"));
+            genres.add(genre);
+        });
+        film.setLike(new HashSet<>(like));
+        film.setGenre(new HashSet<>(genres));
     }
 
     private static RowMapper<Film> getFilmMapper() {
