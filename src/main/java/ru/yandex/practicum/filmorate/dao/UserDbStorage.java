@@ -98,7 +98,7 @@ public class UserDbStorage implements UserStorage {
     public User getUserByID(int id) {
         User user = jdbcTemplate.queryForObject(
                 "SELECT id, name, email, login, birthday " +
-                        "FROM users WHERE id = ?;", getFilmMapper(), id);
+                        "FROM users WHERE id = ?;", getUserMapper(), id);
         if (user != null) {
             getFriends(user);
             return user;
@@ -116,25 +116,26 @@ public class UserDbStorage implements UserStorage {
         }
 
         for (User u : friends) {
-            String sqlQuery = "SELECT status FROM friends WHERE user_id = ? AND friend_id = ?;";
-            boolean status;
-
             try {
-                status = Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery, Boolean.class, u.getId(), id));
+                String sqlQuery = "SELECT status FROM friends WHERE user_id = ? AND friend_id = ?;";
+                boolean status = Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery, Boolean.class, u.getId(), id));
+                if (status) {
+                    String sql = "UPDATE friends SET status = ? WHERE user_id = ? AND friend_id = ?;";
+                    jdbcTemplate.update(sql, id, u.getId(), true);
+                    jdbcTemplate.update(sql, u.getId(), id, true);
+                } /*else {
+                    String sql = "MERGE INTO friends (user_id, friend_id, status) " +
+                            "VALUES (?, ?, false)";
+                    jdbcTemplate.update(sql, id, u.getId());
+                }*/
             } catch (EmptyResultDataAccessException e) {
-                status = false;
-            }
-
-            if (status) {
-                String sql = "MERGE INTO friends (user_id, friend_id, status) " +
-                        "VALUES (?, ?, true)";
-                jdbcTemplate.update(sql, id, u.getId());
-                jdbcTemplate.update(sql, u.getId(), id);
-            } else {
-                String sql = "MERGE INTO friends (user_id, friend_id, status) " +
+                String sql = "INSERT INTO friends (user_id, friend_id, status) " +
                         "VALUES (?, ?, false)";
                 jdbcTemplate.update(sql, id, u.getId());
+
             }
+
+
         }
     }
 
@@ -154,7 +155,10 @@ public class UserDbStorage implements UserStorage {
 
         List<User> friends = new ArrayList<>();
         for (int friendId : friendsList) {
-            User userFriends = getUserByID(friendId);
+            User userFriends = jdbcTemplate.queryForObject(
+                    "SELECT id, name, email, login, birthday " +
+                            "FROM users WHERE id = ?;", getUserMapper(), friendId);
+
             if (userFriends != null) {
                 friends.add(userFriends);
             }
@@ -162,7 +166,7 @@ public class UserDbStorage implements UserStorage {
         user.setFriends(new HashSet<>(friends));
     }
 
-    private static RowMapper<User> getFilmMapper() {
+    private static RowMapper<User> getUserMapper() {
         return (rs, rowNum) -> {
             /*User user = new User(rs.getString("name"),
                     rs.getString("email"),

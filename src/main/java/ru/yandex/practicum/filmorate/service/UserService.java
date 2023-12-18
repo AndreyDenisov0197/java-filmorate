@@ -29,7 +29,8 @@ public class UserService {
             throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", friendId));
         }
         user.addFriends(friends);
-        userStorage.updateFriends(user);
+        userStorage.updateUser(user);
+        //userStorage.updateFriends(user);
     }
 
     public void removeFriends(int id, int friendId) {
