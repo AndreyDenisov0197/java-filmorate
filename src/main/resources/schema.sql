@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS likes (
 );
 
 CREATE TABLE IF NOT EXISTS friends (
-    user_id INT  NOT NULL,
+    user_id INT  NOT NULL PRIMARY KEY,
     friend_id INT  NOT NULL,
     status BOOL NOT NULL DEFAULT 'false',
     FOREIGN KEY (user_id) REFERENCES users (id),

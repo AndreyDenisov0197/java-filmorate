@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.dao;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -96,7 +97,8 @@ public class UserDbStorage implements UserStorage {
     @Override
     public User getUserByID(int id) {
         User user = jdbcTemplate.queryForObject(
-                "SELECT * FROM users WHERE id = ?;", getFilmMapper(), id);
+                "SELECT id, name, email, login, birthday " +
+                        "FROM users WHERE id = ?;", getFilmMapper(), id);
         if (user != null) {
             getFriends(user);
             return user;
@@ -115,7 +117,13 @@ public class UserDbStorage implements UserStorage {
 
         for (User u : friends) {
             String sqlQuery = "SELECT status FROM friends WHERE user_id = ? AND friend_id = ?;";
-            boolean status = Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery, Boolean.class, u.getId(), id));
+            boolean status;
+
+            try {
+                status = Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery, Boolean.class, u.getId(), id));
+            } catch (EmptyResultDataAccessException e) {
+                status = false;
+            }
 
             if (status) {
                 String sql = "MERGE INTO friends (user_id, friend_id, status) " +
