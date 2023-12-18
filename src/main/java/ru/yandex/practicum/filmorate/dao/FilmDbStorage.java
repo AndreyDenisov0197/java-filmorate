@@ -1,10 +1,12 @@
 package ru.yandex.practicum.filmorate.dao;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
@@ -99,18 +101,21 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film getFilmByID(Integer id) {
-        Film film = jdbcTemplate.queryForObject(
-                "SELECT f.id AS id, f.name AS name, f.description AS description, " +
-                        "f.release_date AS release_date, f.duration AS duration, " +
-                        "f.mpa_id AS mpa_id, r.name AS mpa_name " +
-                        "FROM films AS f " +
-                        "LEFT JOIN mpa AS r ON f.mpa_id = r.id " +
-                        "WHERE f.id = ?;", getFilmMapper(), id);
-        if (film != null) {
+        try {
+            Film film = jdbcTemplate.queryForObject(
+                    "SELECT f.id AS id, f.name AS name, f.description AS description, " +
+                            "f.release_date AS release_date, f.duration AS duration, " +
+                            "f.mpa_id AS mpa_id, r.name AS mpa_name " +
+                            "FROM films AS f " +
+                            "LEFT JOIN mpa AS r ON f.mpa_id = r.id " +
+                            "WHERE f.id = ?;", getFilmMapper(), id);
+
             getGenresAndLikes(film);
             return film;
+
+        } catch (EmptyResultDataAccessException e) {
+            throw new ObjectNotFoundException(String.format("User с ID=%d не существует", id));
         }
-        return null;
     }
 
     @Override

@@ -103,9 +103,6 @@ public class UserDbStorage implements UserStorage {
         } catch (EmptyResultDataAccessException e) {
             throw new ObjectNotFoundException(String.format("User с ID=%d не существует", id));
         }
-
-
-
     }
 
     @Override
