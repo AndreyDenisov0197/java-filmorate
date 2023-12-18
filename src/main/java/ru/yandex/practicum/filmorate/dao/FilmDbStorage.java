@@ -27,7 +27,7 @@ public class FilmDbStorage implements FilmStorage {
 
         int id = insert.executeAndReturnKey(filmToMap(film)).intValue();
         film.setId(id);
-        updateGenresAndRating(film);
+        updateGenresAndMpa(film);
         return film;
     }
 
@@ -45,7 +45,7 @@ public class FilmDbStorage implements FilmStorage {
 
         String sqlQuery = "UPDATE films SET " +
                 "name = ?, description = ?, release_date = ?, " +
-                "duration = ?, rating_id = ?" +
+                "duration = ?, mpa_id = ?" +
                 "WHERE id = ?";
 
         int result = jdbcTemplate.update(sqlQuery,
@@ -53,13 +53,13 @@ public class FilmDbStorage implements FilmStorage {
                 film.getDescription(),
                 film.getReleaseDate(),
                 film.getDuration(),
-                film.getRating().getId(),
+                film.getMpa().getId(),
                 id);
 
         if (result == 1) {
             jdbcTemplate.update("DELETE FROM genre_to_film WHERE film_id = ?;", id);
             jdbcTemplate.update("DELETE FROM likes WHERE film_id = ?;", id);
-            updateGenresAndRating(film);
+            updateGenresAndMpa(film);
         }
         return film;
     }
@@ -69,9 +69,9 @@ public class FilmDbStorage implements FilmStorage {
         List<Film> films = new ArrayList<>();
         String sql = "SELECT f.id as id, f.name as name, f.description as description, " +
                 "f.release_date AS release_date, f.duration as duration, " +
-                "f.rating_id as rating_id, r.name as rating_name " +
+                "f.mpa_id as mpa_id, r.name as mpa_name " +
                 "FROM films AS f " +
-                "LEFT JOIN rating AS r ON f.rating_id = r.id;";
+                "LEFT JOIN mpa AS r ON f.mpa_id = r.id;";
         List<Map<String,Object>> list = jdbcTemplate.queryForList(sql);
         list.forEach(rs -> {
             Date date = (Date) rs.get("release_date");
@@ -82,7 +82,7 @@ public class FilmDbStorage implements FilmStorage {
                             (String) rs.get("description"),
                             localDate,
                             (Integer) rs.get("duration"),
-                            new Mpa((Integer) rs.get("rating_id"))
+                            new Mpa((Integer) rs.get("mpa_id"))
                     );
                     int id = (Integer) rs.get("id");
                     film.setId(id);
@@ -97,9 +97,9 @@ public class FilmDbStorage implements FilmStorage {
         Film film = jdbcTemplate.queryForObject(
                 "SELECT f.id AS id, f.name AS name, f.description AS description, " +
                         "f.release_date AS release_date, f.duration AS duration, " +
-                        "f.rating_id AS rating_id, r.name AS rating_name " +
+                        "f.mpa_id AS mpa_id, r.name AS mpa_name " +
                         "FROM films AS f " +
-                        "LEFT JOIN rating AS r ON f.rating_id = r.id " +
+                        "LEFT JOIN mpa AS r ON f.mpa_id = r.id " +
                         "WHERE f.id = ?;", getFilmMapper(), id);
         if (film != null) {
             getGenresAndLikes(film);
@@ -132,7 +132,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Mpa> getMpaList() {
-        String sql = "SELECT * FROM rating;";
+        String sql = "SELECT * FROM mpa;";
         List<Mpa> mpas = new ArrayList<>();
 
         List<Map<String,Object>> list = jdbcTemplate.queryForList(sql);
@@ -147,7 +147,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Mpa getMpaById(int id) {
-        String sql = "SELECT * FROM rating WHERE id = ?;";
+        String sql = "SELECT * FROM mpa WHERE id = ?;";
         return jdbcTemplate.queryForObject(sql, getMpaMapper(), id);
     }
 
@@ -186,7 +186,7 @@ public class FilmDbStorage implements FilmStorage {
                     rs.getString("description"),
                     rs.getDate("release_date").toLocalDate(),
                     rs.getInt("duration"),
-                    (new Mpa(rs.getInt("rating_id")))
+                    (new Mpa(rs.getInt("mpa_id")))
             );
             film.setId(rs.getInt("id"));
             return film;
@@ -194,18 +194,18 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private static Map<String, Object> filmToMap(Film film) {
-        Mpa mpa = film.getRating();
+        Mpa mpa = film.getMpa();
         int id = mpa.getId();
         return Map.of(
                 "name", film.getName(),
                 "description", film.getDescription(),
                 "release_date", Date.valueOf(film.getReleaseDate()),
                 "duration", film.getDuration(),
-                "rating_id", id
+                "mpa_id", id
         );
     }
 
-    private void updateGenresAndRating(Film film) {
+    private void updateGenresAndMpa(Film film) {
         Set<Genre> genres = film.getGenre();
         Set<Integer> likes = film.getLike();
         int id = film.getId();

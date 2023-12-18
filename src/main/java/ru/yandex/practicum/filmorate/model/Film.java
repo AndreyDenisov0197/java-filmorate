@@ -18,17 +18,17 @@ public class Film extends Entity {
     private Integer duration;
     private Set<Integer> like;
     private Set<Genre> genre;
-    private Mpa rating;
+    private Mpa mpa;
 
     @Builder
-    public Film(String name, String description, LocalDate releaseDate, Integer duration, Mpa rating) {
+    public Film(String name, String description, LocalDate releaseDate, Integer duration, Mpa mpa) {
         super(name);
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
         this.like = new HashSet<>();
         this.genre = new HashSet<>();
-        this.rating = rating;
+        this.mpa = mpa;
     }
 /*    public Film setId(int id) {
         this.id = id;
