@@ -31,7 +31,7 @@ class UserDbStorageTest {
     @Test
     public void testFindUserById() {
         // Подготавливаем данные для теста
-        User newUser = new User( "Ivan Petrov", "user@email.ru", "vanya123",
+        User newUser = new User("Ivan Petrov", "user@email.ru", "vanya123",
                 LocalDate.of(1990, 1, 1));
         User user1 = userStorage.addUser(newUser); //тауже протестировали в данном методе
 
@@ -47,7 +47,7 @@ class UserDbStorageTest {
 
     @Test
     public void testDeleteUser() {
-        User newUser = new User( "Ivan Denisov", "user3@email.ru", "vanya000",
+        User newUser = new User("Ivan Denisov", "user3@email.ru", "vanya000",
                 LocalDate.of(1991, 11, 12));
 
         User user1 = userStorage.addUser(newUser);

@@ -34,7 +34,7 @@ public class FilmDbStorageTest {
 
     @Test
     public void testFindFilmById() {
-        Film film = new Film( "Film1", "descriplion",
+        Film film = new Film("Film1", "descriplion",
                 LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
         Set<Genre> genres = new HashSet<>();
         genres.add(new Genre(6, "Боевик"));
@@ -53,7 +53,7 @@ public class FilmDbStorageTest {
 
     @Test
     public void testDeleteFilm() {
-        Film film = new Film( "Film1", "descriplion",
+        Film film = new Film("Film1", "descriplion",
                 LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
         Set<Genre> genres = new HashSet<>();
         genres.add(new Genre(6, "Боевик"));
@@ -76,7 +76,7 @@ public class FilmDbStorageTest {
 
     @Test
     public void testUpdateFilms() {
-        Film film = new Film( "Film1", "descriplion",
+        Film film = new Film("Film1", "descriplion",
                 LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
         Set<Genre> genres = new HashSet<>();
         genres.add(new Genre(6, "Боевик"));
@@ -98,13 +98,13 @@ public class FilmDbStorageTest {
 
     @Test
     public void testGetUsers() {
-        Film film1 = new Film( "Film1", "descriplion",
+        Film film1 = new Film("Film1", "descriplion",
                 LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
         Set<Genre> genres = new HashSet<>();
         genres.add(new Genre(6, "Боевик"));
         film1.setGenre(genres);
 
-        Film film2 = new Film( "Film1", "descriplion",
+        Film film2 = new Film("Film1", "descriplion",
                 LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
         genres.add(new Genre(2, "Драма"));
         film2.setGenre(genres);
