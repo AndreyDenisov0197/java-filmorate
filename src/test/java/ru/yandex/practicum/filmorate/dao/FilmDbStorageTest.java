@@ -35,7 +35,7 @@ public class FilmDbStorageTest {
     @Test
     public void testFindFilmById() {
         Film film = new Film("Film1", "descriplion",
-                LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
+                LocalDate.of(1990, 1, 1), 144, new Mpa(1));
         Set<Genre> genres = new HashSet<>();
         genres.add(new Genre(6, "Боевик"));
         film.setGenre(genres);
@@ -54,7 +54,7 @@ public class FilmDbStorageTest {
     @Test
     public void testDeleteFilm() {
         Film film = new Film("Film1", "descriplion",
-                LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
+                LocalDate.of(1990, 1, 1), 144, new Mpa(1));
         Set<Genre> genres = new HashSet<>();
         genres.add(new Genre(6, "Боевик"));
         film.setGenre(genres);
@@ -77,7 +77,7 @@ public class FilmDbStorageTest {
     @Test
     public void testUpdateFilms() {
         Film film = new Film("Film1", "descriplion",
-                LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
+                LocalDate.of(1990, 1, 1), 144, new Mpa(1));
         Set<Genre> genres = new HashSet<>();
         genres.add(new Genre(6, "Боевик"));
         film.setGenre(genres);
@@ -99,13 +99,13 @@ public class FilmDbStorageTest {
     @Test
     public void testGetUsers() {
         Film film1 = new Film("Film1", "descriplion",
-                LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
+                LocalDate.of(1990, 1, 1), 144, new Mpa(1));
         Set<Genre> genres = new HashSet<>();
         genres.add(new Genre(6, "Боевик"));
         film1.setGenre(genres);
 
         Film film2 = new Film("Film1", "descriplion",
-                LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
+                LocalDate.of(1990, 1, 1), 144, new Mpa(1));
         genres.add(new Genre(2, "Драма"));
         film2.setGenre(genres);
 
@@ -159,11 +159,11 @@ public class FilmDbStorageTest {
     @Test
     public void testGetMpaList() {
         List<Mpa> list1 = new ArrayList<>();
-        list1.add(new Mpa(1, "G"));
-        list1.add(new Mpa(2, "PG"));
-        list1.add(new Mpa(3, "PG-13"));
-        list1.add(new Mpa(4, "R"));
-        list1.add(new Mpa(5, "NC-17"));
+        list1.add(new Mpa(1));
+        list1.add(new Mpa(2));
+        list1.add(new Mpa(3));
+        list1.add(new Mpa(4));
+        list1.add(new Mpa(5));
 
         List<Mpa> list2 = filmDbStorage.getMpaList();
 
@@ -173,7 +173,7 @@ public class FilmDbStorageTest {
 
     @Test
     public void testGetMpaById() {
-        Mpa mpa = new Mpa(2, "PG");
+        Mpa mpa = new Mpa(2);
         Mpa mpa1 = filmDbStorage.getMpaById(mpa.getId());
 
         Assertions.assertEquals(mpa.toString(), mpa1.toString());
