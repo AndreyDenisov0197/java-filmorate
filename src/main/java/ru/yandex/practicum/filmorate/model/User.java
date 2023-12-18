@@ -36,14 +36,14 @@ public class User extends Entity {
         this.friends = new HashSet<>();
     }
 
-    @Builder
+/*    @Builder
     public User(String login, String name, int id, String email, LocalDate birthday) {
         super(id, name);
         this.email = email;
         this.login = login;
         this.birthday = birthday;
         this.friends = new HashSet<>();
-    }
+    }*/
     /*public User setId(int id) {
         this.id = id;
         return this;
