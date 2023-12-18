@@ -94,14 +94,18 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User getUserByID(int id) {
-        User user = jdbcTemplate.queryForObject(
-                "SELECT id, name, email, login, birthday " +
-                        "FROM users WHERE id = ?;", getUserMapper(), id);
-        if (user != null) {
+        try {
+            User user = jdbcTemplate.queryForObject(
+                    "SELECT id, name, email, login, birthday " +
+                            "FROM users WHERE id = ?;", getUserMapper(), id);
             getFriends(user);
             return user;
+        } catch (EmptyResultDataAccessException e) {
+            throw new ObjectNotFoundException(String.format("User с ID=%d не существует", id));
         }
-        return null;
+
+
+
     }
 
     @Override
