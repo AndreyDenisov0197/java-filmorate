@@ -30,6 +30,17 @@ public class Film extends Entity {
         this.genre = new HashSet<>();
         this.mpa = mpa;
     }
+
+    @Builder
+    public Film(String name, String description, LocalDate releaseDate, Integer duration, Mpa mpa, Set<Genre> genre) {
+        super(name);
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.like = new HashSet<>();
+        this.genre = genre;
+        this.mpa = mpa;
+    }
 /*    public Film setId(int id) {
         this.id = id;
         return this;

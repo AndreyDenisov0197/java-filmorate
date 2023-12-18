@@ -67,12 +67,15 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public List<Film> getFilm() {
         List<Film> films = new ArrayList<>();
+
         String sql = "SELECT f.id as id, f.name as name, f.description as description, " +
                 "f.release_date AS release_date, f.duration as duration, " +
                 "f.mpa_id as mpa_id, r.name as mpa_name " +
                 "FROM films AS f " +
                 "LEFT JOIN mpa AS r ON f.mpa_id = r.id;";
+
         List<Map<String,Object>> list = jdbcTemplate.queryForList(sql);
+
         list.forEach(rs -> {
             Date date = (Date) rs.get("release_date");
             LocalDate localDate = new java.sql.Date(date.getTime()).toLocalDate();
@@ -87,10 +90,30 @@ public class FilmDbStorage implements FilmStorage {
                     );
                     int id = (Integer) rs.get("id");
                     film.setId(id);
-                    getGenresAndLikes(film);
+                    film.setLike(getLikes(id));
+                    film.setGenre(getGenreHashSet(id));
                     films.add(film);
                 });
         return films;
+    }
+
+    private Set<Genre> getGenreHashSet(int id) {
+        Set<Genre> genres = new HashSet<>();
+
+        String sql = "SELECT gf.genre_id AS id, g.name AS name " +
+                "FROM genre_to_film AS gf " +
+                "LEFT JOIN genre AS g ON gf.genre_id = g.genre_id " +
+                "WHERE gf.film_id = ?";
+
+        List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, id);
+        list.forEach(rs -> {
+            Genre genre = new Genre(
+                    (Integer) rs.get("id"),
+                    (String) rs.get("name")
+            );
+            genres.add(genre);
+        });
+        return genres;
     }
 
     @Override
@@ -103,7 +126,8 @@ public class FilmDbStorage implements FilmStorage {
                         "LEFT JOIN mpa AS r ON f.mpa_id = r.id " +
                         "WHERE f.id = ?;", getFilmMapper(), id);
         if (film != null) {
-            getGenresAndLikes(film);
+            film.setLike(getLikes(id));
+            film.setGenre(getGenreHashSet(id));
             return film;
         }
         return null;
@@ -162,24 +186,10 @@ public class FilmDbStorage implements FilmStorage {
     }
 
 
-    private void getGenresAndLikes(Film film) {
-        int id = film.getId();
+    private Set<Integer> getLikes(int id) {
         List<Integer> like = jdbcTemplate.queryForList(
                 "SELECT user_id FROM likes WHERE film_id = ?;", Integer.class, id);
-
-        String sql = "SELECT gf.genre_id, g.name " +
-                "FROM genre_to_film AS gf " +
-                "LEFT JOIN genres AS g ON gf.genre_id = g.id " +
-                "WHERE gf.film_id = ?;";
-
-        List<Map<String,Object>> list = jdbcTemplate.queryForList(sql, id);
-        List<Genre> genres = new ArrayList<>();
-        list.forEach(m -> {
-            Genre genre = new Genre((Integer)m.get("genre_id"), (String)m.get("name"));
-            genres.add(genre);
-        });
-        film.setLike(new HashSet<>(like));
-        film.setGenre(new HashSet<>(genres));
+        return new HashSet<>(like);
     }
 
     private static RowMapper<Film> getFilmMapper() {
