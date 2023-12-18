@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
@@ -65,16 +66,13 @@ public class UserDbStorage implements UserStorage {
     public User updateUser(User user) {
         int id = user.getId();
 
-        /*String sqlQuery = "UPDATE users SET " +
-                "name = ?, email = ?, login = ?, " +
-                "birthday = ? WHERE id = ?";
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try {
+            User userUpdate = jdbcTemplate.queryForObject(sql, getUserMapper(), id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ObjectNotFoundException(String.format("User с ID=%d не существует", id));
+        }
 
-        int result = jdbcTemplate.update(sqlQuery,
-                user.getName(),
-                user.getEmail(),
-                user.getLogin(),
-                user.getBirthday(),
-                id);*/
 
         String sqlQuery = "UPDATE users SET " +
                 "login = ?, name = ?, email = ?, " +
