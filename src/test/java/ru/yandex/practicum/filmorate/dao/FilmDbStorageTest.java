@@ -42,8 +42,9 @@ public class FilmDbStorageTest {
 
         Film filmAdd = filmDbStorage.addFilm(film);
         Film film1 = filmDbStorage.getFilmByID(filmAdd.getId());
+        filmAdd.setMpa(filmDbStorage.getMpaById(1));
 
-        Assertions.assertEquals(film.toString(), film1.toString());
+        Assertions.assertEquals(filmAdd.toString(), film1.toString());
 
         assertThat(film1)
                 .isNotNull()
@@ -61,6 +62,7 @@ public class FilmDbStorageTest {
 
         Film filmAdd = filmDbStorage.addFilm(film);
         Film film1 = filmDbStorage.getFilmByID(filmAdd.getId());
+        filmAdd.setMpa(filmDbStorage.getMpaById(1));
 
         assertThat(film1)
                 .isNotNull() // проверяем, что объект не равен null
@@ -112,6 +114,8 @@ public class FilmDbStorageTest {
         filmDbStorage.addFilm(film1);
         filmDbStorage.addFilm(film2);
 
+        film1.setMpa(filmDbStorage.getMpaById(1));
+        film2.setMpa(filmDbStorage.getMpaById(1));
 
         List<Film> filmList = new ArrayList<>();
         filmList.add(film1);
@@ -173,7 +177,7 @@ public class FilmDbStorageTest {
 
     @Test
     public void testGetMpaById() {
-        Mpa mpa = new Mpa(2);
+        Mpa mpa = new Mpa(2, "PG");
         Mpa mpa1 = filmDbStorage.getMpaById(mpa.getId());
 
         Assertions.assertEquals(mpa.toString(), mpa1.toString());
