@@ -27,7 +27,7 @@ public class FilmDbStorage implements FilmStorage {
 
         int id = insert.executeAndReturnKey(filmToMap(film)).intValue();
         film.setId(id);
-        updateGenresAndMpa(film);
+        updateGenresAndLikes(film);
         return film;
     }
 
@@ -59,7 +59,7 @@ public class FilmDbStorage implements FilmStorage {
         if (result == 1) {
             jdbcTemplate.update("DELETE FROM genre_to_film WHERE film_id = ?;", id);
             jdbcTemplate.update("DELETE FROM likes WHERE film_id = ?;", id);
-            updateGenresAndMpa(film);
+            updateGenresAndLikes(film);
         }
         return film;
     }
@@ -82,7 +82,8 @@ public class FilmDbStorage implements FilmStorage {
                             (String) rs.get("description"),
                             localDate,
                             (Integer) rs.get("duration"),
-                            new Mpa((Integer) rs.get("mpa_id"))
+                            new Mpa((Integer) rs.get("mpa_id"),
+                                    (String) rs.get("mpa_name"))
                     );
                     int id = (Integer) rs.get("id");
                     film.setId(id);
@@ -138,7 +139,8 @@ public class FilmDbStorage implements FilmStorage {
         List<Map<String,Object>> list = jdbcTemplate.queryForList(sql);
         list.forEach(rs -> {
             Mpa mpa = new Mpa(
-                    (Integer) rs.get("id")
+                    (Integer) rs.get("id"),
+                    (String) rs.get("name")
             );
             mpas.add(mpa);
         });
@@ -152,7 +154,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     private RowMapper<Mpa> getMpaMapper() {
-        return ((rs, rowNum) -> new Mpa(rs.getInt("id")));
+        return ((rs, rowNum) -> new Mpa(rs.getInt("id"), rs.getString("name")));
     }
 
     private static RowMapper<Genre> getGenreMapper() {
@@ -186,7 +188,8 @@ public class FilmDbStorage implements FilmStorage {
                     rs.getString("description"),
                     rs.getDate("release_date").toLocalDate(),
                     rs.getInt("duration"),
-                    (new Mpa(rs.getInt("mpa_id")))
+                    (new Mpa(rs.getInt("mpa_id"),
+                            rs.getString("name")))
             );
             film.setId(rs.getInt("id"));
             return film;
@@ -205,7 +208,7 @@ public class FilmDbStorage implements FilmStorage {
         );
     }
 
-    private void updateGenresAndMpa(Film film) {
+    private void updateGenresAndLikes(Film film) {
         Set<Genre> genres = film.getGenre();
         Set<Integer> likes = film.getLike();
         int id = film.getId();
