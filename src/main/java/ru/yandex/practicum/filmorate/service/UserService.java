@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -13,10 +14,11 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Qualifier("userDbStorage")
 public class UserService {
     private final UserStorage userStorage;
 
-    public void addFriends(int id, int friendId) {
+    public void addFriends(int id, int friendId) { // изменить логику добавления в друзья + обновить БД
         User user = userStorage.getUserByID(id);
         if (user == null) {
             throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", id));
@@ -27,7 +29,7 @@ public class UserService {
             throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", friendId));
         }
         user.addFriends(friendId);
-        friends.addFriends(id);
+        userStorage.updateFriends(user);
     }
 
     public void removeFriends(int id, int friendId) {
@@ -36,15 +38,16 @@ public class UserService {
             throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", id));
         }
         user.removeFriends(friendId);
-
+/*
         User friends = userStorage.getUserByID(friendId);
         if (friends == null) {
             throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", friendId));
         }
-        friends.removeFriends(id);
+        friends.removeFriends(id);*/
+        userStorage.updateFriends(user);
     }
 
-    public List<User> getFriends(int id) {
+    public List<User> getFriends(int id) { // стоит ли вывести друзей через метод UserDbStorage.getFriends(User user)
         User user = userStorage.getUserByID(id);
 
         if (user == null) {

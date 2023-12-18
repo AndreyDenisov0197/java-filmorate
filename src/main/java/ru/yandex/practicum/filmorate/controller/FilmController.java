@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.time.LocalDate;
@@ -62,6 +64,27 @@ public class FilmController {
         }
         return filmService.getTop10Films(count);
     }
+
+    @GetMapping("/genres")
+    public List<Genre> getGenresList() {
+        return filmService.getGenresList();
+    }
+
+    @GetMapping("/genres/{id}")
+    public Genre getGenreById(@PathVariable int id) {
+        return filmService.getGenreById(id);
+    }
+
+    @GetMapping("/mpa")
+    public List<Mpa> getMpaList() {
+        return filmService.getMpaList();
+    }
+
+    @GetMapping("/mpa/{id}")
+    public Mpa getMpaList(@PathVariable int id) {
+        return filmService.getMpaById(id);
+    }
+
 
 
     protected void validate(Film film) {

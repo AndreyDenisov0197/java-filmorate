@@ -27,6 +27,19 @@ public class User extends Entity {
         this.friends = new HashSet<>();
     }
 
+    @Builder
+    public User(int id, String name, String email, String login, LocalDate birthday) {
+        super(id, name);
+        this.email = email;
+        this.login = login;
+        this.birthday = birthday;
+        this.friends = new HashSet<>();
+    }
+    /*public User setId(int id) {
+        this.id = id;
+        return this;
+    }*/
+
     public void addFriends(Integer id) {
         friends.add(id);
     }

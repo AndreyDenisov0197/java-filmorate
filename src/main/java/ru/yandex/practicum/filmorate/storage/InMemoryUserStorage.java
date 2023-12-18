@@ -1,15 +1,13 @@
+/*
 package ru.yandex.practicum.filmorate.storage;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-@Component
+//@Component("InMemoryUserStorage")
 public class InMemoryUserStorage implements UserStorage {
     protected final Map<Integer, User> allUser = new HashMap<>();
     protected int index = 1;
@@ -58,4 +56,10 @@ public class InMemoryUserStorage implements UserStorage {
         }
         return allUser.get(user.getId());
     }
+
+    @Override
+    public void updateFriends(User user) {
+        updateUser(user);
+    }
 }
+*/

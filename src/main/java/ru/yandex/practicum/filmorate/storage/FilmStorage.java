@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.storage;
 
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.List;
 
@@ -15,4 +17,12 @@ public interface FilmStorage {
     List<Film> getFilm();
 
     Film getFilmByID(Integer id);
+
+    List<Genre> getGenresList();
+
+    Genre getGenreById(int id);
+
+    List<Mpa> getMpaList();
+
+    Mpa getMpaById(int id);
 }
