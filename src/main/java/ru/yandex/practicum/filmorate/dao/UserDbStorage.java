@@ -28,7 +28,6 @@ public class UserDbStorage implements UserStorage {
 
         int id = insert.executeAndReturnKey(userToMap(user)).intValue();
         user.setId(id);
-        updateFriends(user);
         return user;
     }
 
@@ -41,101 +40,75 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getUser() {
-        List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM users;";
-        List<Map<String,Object>> list = jdbcTemplate.queryForList(sql);
-        list.forEach(rs -> {
-            Date date = (Date) rs.get("birthday");
-            LocalDate localDate = new java.sql.Date(date.getTime()).toLocalDate();
-
-            User user = new User(
-                    (String) rs.get("login"),
-                    (String) rs.get("name"),
-                    (String) rs.get("email"),
-                    localDate
-            );
-            user.setId((Integer) rs.get("id"));
-            getFriends(user);
-            users.add(user);
-        });
-        return users;
+        return new LinkedList<>(jdbcTemplate.query("SELECT * FROM users;", getUserMapper()));
     }
 
 
     @Override
     public User updateUser(User user) {
         int id = user.getId();
-
-        String sql = "SELECT * FROM users WHERE id = ?";
-        try {
-            User userUpdate = jdbcTemplate.queryForObject(sql, getUserMapper(), id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new ObjectNotFoundException(String.format("User с ID=%d не существует", id));
-        }
-
+        getUserById(id);
 
         String sqlQuery = "UPDATE users SET " +
                 "login = ?, name = ?, email = ?, " +
                 "birthday = ? WHERE id = ?";
 
-        int result = jdbcTemplate.update(sqlQuery,
+        jdbcTemplate.update(sqlQuery,
                 user.getLogin(),
                 user.getName(),
                 user.getEmail(),
                 user.getBirthday(),
                 id);
-
-        if (result == 1) {
-            jdbcTemplate.update("DELETE FROM friends WHERE user_id = ?;", id);
-            updateFriends(user);
-        }
         return user;
     }
 
     @Override
-    public User getUserByID(int id) {
+    public User getUserById(int id) {
         try {
-            User user = jdbcTemplate.queryForObject(
-                    "SELECT id, name, email, login, birthday " +
-                            "FROM users WHERE id = ?;", getUserMapper(), id);
-            getFriends(user);
-            return user;
+            return jdbcTemplate.queryForObject(
+                    "SELECT * FROM users WHERE id = ?;", getUserMapper(), id);
         } catch (EmptyResultDataAccessException e) {
             throw new ObjectNotFoundException(String.format("User с ID=%d не существует", id));
         }
     }
 
     @Override
-    public void updateFriends(User user) {
-        Set<User> friends = user.getFriends();
-        int id = user.getId();
+    public List<User> getAllUserFriends(Integer userId) {
+        getUserById(userId);
+        return new LinkedList<>(jdbcTemplate.query("select * from users where id IN (select friend_id from friends where user_id = ?) ORDER BY users.id;", getUserMapper(), userId));
+    }
 
-        if (friends.isEmpty()) {
-            return;
-        }
+    @Override
+    public List<User> getUserCommonFriends(Integer userId, Integer otherId) {
+        getUserById(userId);
+        getUserById(otherId);
+        return new LinkedList<>(jdbcTemplate.query("SELECT * " +
+                "FROM users WHERE users.id IN ( " +
+                "SELECT friend_id " +
+                "FROM friends " +
+                "WHERE friends.user_id = " + userId + " " +
+                "INTERSECT " +
+                "SELECT friend_id " +
+                "FROM friends " +
+                "WHERE friends.user_id = " + otherId + ") " +
+                "AND users.id NOT IN (" + userId + ", " + otherId + ");", getUserMapper()));
+    }
 
-        for (User u : friends) {
-            try {
-                String sqlQuery = "SELECT status FROM friends WHERE user_id = ? AND friend_id = ?;";
-                boolean status = Boolean.FALSE.equals(jdbcTemplate.queryForObject(sqlQuery, Boolean.class, u.getId(), id));
-                if (status) {
-                    String sql = "UPDATE friends SET status = ? WHERE user_id = ? AND friend_id = ?;";
-                    jdbcTemplate.update(sql, id, u.getId(), true);
-                    jdbcTemplate.update(sql, u.getId(), id, true);
-                } /*else {
-                    String sql = "MERGE INTO friends (user_id, friend_id, status) " +
-                            "VALUES (?, ?, false)";
-                    jdbcTemplate.update(sql, id, u.getId());
-                }*/
-            } catch (EmptyResultDataAccessException e) {
-                String sql = "INSERT INTO friends (user_id, friend_id, status) " +
-                        "VALUES (?, ?, false)";
-                jdbcTemplate.update(sql, id, u.getId());
+    @Override
+    public void putNewFriend(Integer userId, Integer friendId) {
+        getUserById(userId);
+        getUserById(friendId);
+        String sql = "INSERT INTO friends (user_id, friend_id) VALUES (?, ?)";
+        jdbcTemplate.update(sql, userId, friendId);
 
-            }
+    }
 
-
-        }
+    @Override
+    public void deleteFriend(Integer userId, Integer friendId) {
+        getUserById(userId);
+        getUserById(friendId);
+        String sql = "DELETE FROM friends WHERE user_id = ? AND friend_id = ?;";
+        jdbcTemplate.update(sql, userId, friendId);
     }
 
     private static Map<String, Object> userToMap(User user) {
@@ -147,32 +120,8 @@ public class UserDbStorage implements UserStorage {
         );
     }
 
-    private void getFriends(User user) {
-        int id = user.getId();
-        List<Integer> friendsList = jdbcTemplate.queryForList(
-                "SELECT friend_id FROM friends WHERE user_id = ?;", Integer.class, id);
-
-        List<User> friends = new ArrayList<>();
-        for (int friendId : friendsList) {
-            User userFriends = jdbcTemplate.queryForObject(
-                    "SELECT id, name, email, login, birthday " +
-                            "FROM users WHERE id = ?;", getUserMapper(), friendId);
-
-            if (userFriends != null) {
-                friends.add(userFriends);
-            }
-        }
-        user.setFriends(new HashSet<>(friends));
-    }
-
     private static RowMapper<User> getUserMapper() {
         return (rs, rowNum) -> {
-            /*User user = new User(rs.getString("name"),
-                    rs.getString("email"),
-                    rs.getString("login"),
-                    rs.getDate("birthday").toLocalDate()
-            );*/
-
             User user = new User(
                     rs.getString("login"),
                     rs.getString("name"),

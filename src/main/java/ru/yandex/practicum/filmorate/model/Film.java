@@ -16,7 +16,6 @@ public class Film extends Entity {
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
-    private Set<Integer> like;
     private Set<Genre> genres;
     private Mpa mpa;
 
@@ -26,31 +25,7 @@ public class Film extends Entity {
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
-        this.like = new HashSet<>();
         this.genres = new HashSet<>();
         this.mpa = mpa;
-    }
-
-/*    @Builder
-    public Film(String name, String description, LocalDate releaseDate, Integer duration, Mpa mpa, Set<Genre> genres) {
-        super(name);
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.duration = duration;
-        this.like = new HashSet<>();
-        this.genres = genres;
-        this.mpa = mpa;
-    }*/
-
-    public void addLike(Integer id) {
-        like.add(id);
-    }
-
-    public void removeLike(Integer id) {
-        like.remove(id);
-    }
-
-    public long getRate() {
-        return like.size();
     }
 }

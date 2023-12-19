@@ -18,42 +18,20 @@ import java.util.stream.Collectors;
 @Qualifier("filmDbStorage")
 public class FilmService {
     private final FilmStorage filmStorage;
-    private final UserService userService;
-    public static final Comparator<Film> FILM_COMPARATOR = Comparator.comparingLong(Film::getRate).reversed();
 
     public void addLike(int id, int userId) {
-        Film film = filmStorage.getFilmByID(id);
-        if (film == null) {
-            throw new ObjectNotFoundException(String.format("Фильма с ID=%d не существует", id));
-        }
-
-        if (userService.getUserByID(userId) == null) {
-            throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", userId));
-        }
-        film.addLike(userId);
-        updateFilm(film);
+        filmStorage.addLike(id, userId);
     }
 
     public void removeLike(int id, int userId) {
-        Film film = filmStorage.getFilmByID(id);
-        if (film == null) {
-            throw new ObjectNotFoundException(String.format("Фильма с ID=%d не существует", id));
-        }
-        if (userService.getUserByID(userId) == null) {
-            throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", userId));
-        }
-
-        film.removeLike(userId);
-        updateFilm(film);
+        filmStorage.removeLike(id, userId);
     }
 
     public List<Film> getTop10Films(int count) {
         return filmStorage.getFilm().stream()
-                .sorted(FILM_COMPARATOR)
                 .limit(count)
                 .collect(Collectors.toList());
     }
-
     public List<Film> getFilm() {
         return filmStorage.getFilm();
     }

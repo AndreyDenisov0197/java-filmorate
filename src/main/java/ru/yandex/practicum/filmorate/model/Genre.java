@@ -11,8 +11,4 @@ public class Genre {
         this.id = id;
         this.name = name;
     }
-
-/*    public Genre(Integer id) {
-        this.id = id;
-    }*/
 }

@@ -36,7 +36,7 @@ class UserDbStorageTest {
         User user1 = userStorage.addUser(newUser); //тауже протестировали в данном методе
 
         // вызываем тестируемый метод
-        User savedUser = userStorage.getUserByID(user1.getId());
+        User savedUser = userStorage.getUserById(user1.getId());
 
         // проверяем утверждения
         assertThat(savedUser)
@@ -52,7 +52,7 @@ class UserDbStorageTest {
 
         User user1 = userStorage.addUser(newUser);
 
-        User savedUser = userStorage.getUserByID(user1.getId());
+        User savedUser = userStorage.getUserById(user1.getId());
 
         assertThat(savedUser)
                 .isNotNull() // проверяем, что объект не равен null
@@ -62,7 +62,7 @@ class UserDbStorageTest {
         userStorage.deleteUser(savedUser);
 
         Assertions.assertThrows(ObjectNotFoundException.class, () -> {
-            userStorage.getUserByID(user1.getId());
+            userStorage.getUserById(user1.getId());
         });
     }
 
@@ -97,15 +97,20 @@ class UserDbStorageTest {
                 LocalDate.of(1991, 11, 12));
         User userAdd = userStorage.addUser(user1);
 
-        User newUser = userStorage.getUserByID(userAdd.getId());
+        User newUser = userStorage.getUserById(userAdd.getId());
         newUser.setName("Dmitriy Zotov");
 
         userStorage.updateUser(newUser);
-        User updateUser = userStorage.getUserByID(userAdd.getId());
+        User updateUser = userStorage.getUserById(userAdd.getId());
 
         assertThat(updateUser)
                 .isNotNull()
                 .usingRecursiveComparison()
                 .isEqualTo(newUser);
+    }
+
+    @Test
+    public void testGetAllUserFriends() {
+
     }
 }
