@@ -63,7 +63,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> getFilm() { //// нужно отфильтроваться по лайкам .....................................
+    public List<Film> getFilm() {
 
         String sql = "SELECT *, mpa.id as mpa_id, mpa.name as mpa_name " +
                 "FROM films " +
@@ -71,6 +71,20 @@ public class FilmDbStorage implements FilmStorage {
                 ";";
 
         return new LinkedList<>(jdbcTemplate.query(sql, getFilmMapper()));
+    }
+
+    @Override
+    public List<Film> getPopularFilm(int count) {
+
+        String sql = "SELECT *, mpa.id as mpa_id, mpa.name as mpa_name, COUNT(likes.user_id) " +
+                "FROM films " +
+                "JOIN mpa  ON films.mpa_id = mpa.id " +
+                "LEFT JOIN likes ON films.id = likes.film_id " +
+                "GROUP BY likes.user_id " +
+                "ORDER BY COUNT(likes.user_id) DESC " +
+                "LIMIT ?;";
+
+        return new LinkedList<>(jdbcTemplate.query(sql, getFilmMapper(), count));
     }
 
 
@@ -124,7 +138,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public void addLike(int filmId, int userId) {
         int insert = jdbcTemplate.update("INSERT INTO likes (film_id, user_id) " +
-                "VALUE (?, ?);", filmId, userId);
+                "VALUES (?, ?);", filmId, userId);
         if (insert == 0) {
             throw new ObjectNotFoundException("Такого фильма или пользователя не существует!");
         }
@@ -218,7 +232,7 @@ public class FilmDbStorage implements FilmStorage {
                     (new Mpa(rs.getInt("mpa_id"),
                             rs.getString("mpa_name")))
             );
-            film.setGenres(getFilmGenresFromDb(film.getId()));
+            film.setGenres(getFilmGenresFromDb(id));
             film.setId(id);
             return film;
         };

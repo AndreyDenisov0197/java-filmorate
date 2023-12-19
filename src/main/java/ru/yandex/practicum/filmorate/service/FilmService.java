@@ -26,9 +26,7 @@ public class FilmService {
     }
 
     public List<Film> getTop10Films(int count) {
-        return filmStorage.getFilm().stream()
-                .limit(count)
-                .collect(Collectors.toList());
+        return filmStorage.getPopularFilm(count);
     }
 
     public List<Film> getFilm() {
