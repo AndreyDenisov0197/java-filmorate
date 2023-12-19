@@ -127,7 +127,7 @@ class UserDbStorageTest {
         userStorage.putNewFriend(userAdd1.getId(), userAdd3.getId());
 
         List<User> friends = userStorage.getAllUserFriends(userAdd1.getId());
-        List<User> friendsList =new ArrayList<>();
+        List<User> friendsList = new ArrayList<>();
         friendsList.add(userAdd2);
         friendsList.add(userAdd3);
 
@@ -160,7 +160,7 @@ class UserDbStorageTest {
         userStorage.deleteFriend(userAdd1.getId(), userAdd2.getId());
 
         List<User> friends = userStorage.getAllUserFriends(userAdd1.getId());
-        List<User> friendsList =new ArrayList<>();
+        List<User> friendsList = new ArrayList<>();
         friendsList.add(userAdd3);
 
         Assertions.assertEquals(friends.size(), 1);
@@ -195,7 +195,7 @@ class UserDbStorageTest {
         userStorage.putNewFriend(userAdd2.getId(), userAdd4.getId());
 
         List<User> friends = userStorage.getUserCommonFriends(userAdd1.getId(), userAdd2.getId());
-        List<User> friendsList =new ArrayList<>();
+        List<User> friendsList = new ArrayList<>();
         friendsList.add(userAdd3);
         friendsList.add(userAdd4);
 
