@@ -1,4 +1,3 @@
-/*
 package ru.yandex.practicum.filmorate.dao;
 
 import lombok.RequiredArgsConstructor;
@@ -42,7 +41,7 @@ public class FilmDbStorageTest {
     public void testFindFilmById() {
 
         Film film = new Film("Film1", "descriplion",
-                LocalDate.of(1990, 1, 1), 144, new Mpa(1));
+                LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
         film.setGenres(genres);
 
         Film filmAdd = filmDbStorage.addFilm(film);
@@ -60,7 +59,7 @@ public class FilmDbStorageTest {
     @Test
     public void testDeleteFilm() {
         Film film = new Film("Film1", "descriplion",
-                LocalDate.of(1990, 1, 1), 144, new Mpa(1));
+                LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
         film.setGenres(genres);
 
         Film filmAdd = filmDbStorage.addFilm(film);
@@ -82,7 +81,7 @@ public class FilmDbStorageTest {
     @Test
     public void testUpdateFilms() {
         Film film = new Film("Film1", "descriplion",
-                LocalDate.of(1990, 1, 1), 144, new Mpa(1));
+                LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
         film.setGenres(genres);
 
         Film filmAdd = filmDbStorage.addFilm(film);
@@ -102,11 +101,11 @@ public class FilmDbStorageTest {
     @Test
     public void testGetUsers() {
         Film film1 = new Film("Film1", "descriplion",
-                LocalDate.of(1990, 1, 1), 144, new Mpa(1));
+                LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
         film1.setGenres(genres);
 
         Film film2 = new Film("Film1", "descriplion",
-                LocalDate.of(1990, 1, 1), 144, new Mpa(1));
+                LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
         film2.setGenres(genres);
 
         filmDbStorage.addFilm(film1);
@@ -161,11 +160,11 @@ public class FilmDbStorageTest {
     @Test
     public void testGetMpaList() {
         List<Mpa> list1 = new ArrayList<>();
-        list1.add(new Mpa(1));
-        list1.add(new Mpa(2));
-        list1.add(new Mpa(3));
-        list1.add(new Mpa(4));
-        list1.add(new Mpa(5));
+        list1.add(new Mpa(1, "G"));
+        list1.add(new Mpa(2, "PG"));
+        list1.add(new Mpa(3, "PG-13"));
+        list1.add(new Mpa(4, "R"));
+        list1.add(new Mpa(5, "NC-17"));
 
         List<Mpa> list2 = filmDbStorage.getMpaList();
 
@@ -185,4 +184,3 @@ public class FilmDbStorageTest {
                 .isEqualTo(mpa);
     }
 }
-*/

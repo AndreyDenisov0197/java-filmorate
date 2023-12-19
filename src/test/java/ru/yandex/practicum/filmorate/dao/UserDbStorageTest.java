@@ -111,6 +111,99 @@ class UserDbStorageTest {
 
     @Test
     public void testGetAllUserFriends() {
+        User user1 = new User("vanya000", "Ivan Denisov", "user3@email.ru",
+                LocalDate.of(1991, 11, 12));
+        User userAdd1 = userStorage.addUser(user1);
+
+        User user2 = new User("vanya000", "Ivan Denisov", "user3@email.ru",
+                LocalDate.of(1991, 11, 12));
+        User userAdd2 = userStorage.addUser(user2);
+
+        User user3 = new User("vanya000", "Ivan Denisov", "user3@email.ru",
+                LocalDate.of(1991, 11, 12));
+        User userAdd3 = userStorage.addUser(user3);
+
+        userStorage.putNewFriend(userAdd1.getId(), userAdd2.getId());
+        userStorage.putNewFriend(userAdd1.getId(), userAdd3.getId());
+
+        List<User> friends = userStorage.getAllUserFriends(userAdd1.getId());
+        List<User> friendsList =new ArrayList<>();
+        friendsList.add(userAdd2);
+        friendsList.add(userAdd3);
+
+        assertThat(friends)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(friendsList);
+    }
+
+    @Test
+    public void testDeleteFriend() {
+        User user1 = new User("vanya000", "Ivan Denisov", "user3@email.ru",
+                LocalDate.of(1991, 11, 12));
+        User userAdd1 = userStorage.addUser(user1);
+
+        User user2 = new User("vanya000", "Ivan Denisov", "user3@email.ru",
+                LocalDate.of(1991, 11, 12));
+        User userAdd2 = userStorage.addUser(user2);
+
+        User user3 = new User("vanya000", "Ivan Denisov", "user3@email.ru",
+                LocalDate.of(1991, 11, 12));
+        User userAdd3 = userStorage.addUser(user3);
+
+        userStorage.putNewFriend(userAdd1.getId(), userAdd2.getId());
+        userStorage.putNewFriend(userAdd1.getId(), userAdd3.getId());
+        List<User> friends1 = userStorage.getAllUserFriends(userAdd1.getId());
+
+        Assertions.assertEquals(friends1.size(), 2);
+
+        userStorage.deleteFriend(userAdd1.getId(), userAdd2.getId());
+
+        List<User> friends = userStorage.getAllUserFriends(userAdd1.getId());
+        List<User> friendsList =new ArrayList<>();
+        friendsList.add(userAdd3);
+
+        Assertions.assertEquals(friends.size(), 1);
+        assertThat(friends)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(friendsList);
+    }
+
+    @Test
+    public void testGetUserCommonFriends() {
+        User user1 = new User("vanya000", "Ivan Denisov", "user3@email.ru",
+                LocalDate.of(1991, 11, 12));
+        User userAdd1 = userStorage.addUser(user1);
+
+        User user2 = new User("vanya000", "Ivan Denisov", "user3@email.ru",
+                LocalDate.of(1991, 11, 12));
+        User userAdd2 = userStorage.addUser(user2);
+
+        User user3 = new User("vanya000", "Ivan Denisov", "user3@email.ru",
+                LocalDate.of(1991, 11, 12));
+        User userAdd3 = userStorage.addUser(user3);
+
+        User user4 = new User("vanya000", "Ivan Denisov", "user3@email.ru",
+                LocalDate.of(1991, 11, 12));
+        User userAdd4 = userStorage.addUser(user4);
+
+        userStorage.putNewFriend(userAdd1.getId(), userAdd2.getId());
+        userStorage.putNewFriend(userAdd1.getId(), userAdd3.getId());
+        userStorage.putNewFriend(userAdd1.getId(), userAdd4.getId());
+        userStorage.putNewFriend(userAdd2.getId(), userAdd3.getId());
+        userStorage.putNewFriend(userAdd2.getId(), userAdd4.getId());
+
+        List<User> friends = userStorage.getUserCommonFriends(userAdd1.getId(), userAdd2.getId());
+        List<User> friendsList =new ArrayList<>();
+        friendsList.add(userAdd3);
+        friendsList.add(userAdd4);
+
+        assertThat(friends)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(friendsList);
 
     }
+
 }

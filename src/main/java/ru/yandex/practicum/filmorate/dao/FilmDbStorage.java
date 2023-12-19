@@ -37,6 +37,8 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public void deleteFilm(Film film) {
         int id = film.getId();
+        jdbcTemplate.update("DELETE FROM likes WHERE film_id = ?;", id);
+        jdbcTemplate.update("DELETE FROM genre_to_film WHERE film_id = ?;", id);
         jdbcTemplate.update("DELETE FROM films WHERE id = ?;", id);
     }
 
@@ -80,7 +82,7 @@ public class FilmDbStorage implements FilmStorage {
                 "FROM films " +
                 "JOIN mpa  ON films.mpa_id = mpa.id " +
                 "LEFT JOIN likes ON films.id = likes.film_id " +
-                "GROUP BY likes.user_id " +
+                "GROUP BY films.id, likes.user_id " +
                 "ORDER BY COUNT(likes.user_id) DESC " +
                 "LIMIT ?;";
 
