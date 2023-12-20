@@ -102,11 +102,11 @@ public class FilmDbStorageTest {
     public void testGetUsers() {
         Film film1 = new Film("Film1", "descriplion",
                 LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
-        film1.setGenres(genres);
+      //  film1.setGenres(genres);
 
         Film film2 = new Film("Film1", "descriplion",
                 LocalDate.of(1990, 1, 1), 144, new Mpa(1, "G"));
-        film2.setGenres(genres);
+       // film2.setGenres(genres);
 
         filmDbStorage.addFilm(film1);
         filmDbStorage.addFilm(film2);
