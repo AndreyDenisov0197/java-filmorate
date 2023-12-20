@@ -36,6 +36,4 @@ public interface FilmStorage {
     Set<Genre> getFilmGenresFromDb(int filmId);
 
     void setFilmGenresToDb(int film, Set<Genre> genreSet);
-
-    List<Film> setGenresToFilmList(List<Film> filmList);
 }
