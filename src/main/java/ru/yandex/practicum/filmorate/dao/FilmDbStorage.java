@@ -320,7 +320,13 @@ public class FilmDbStorage implements FilmStorage {
                 "JOIN mpa  ON films.mpa_id = mpa.id " +
                 ";";
 
-        return jdbcTemplate.query(sql, getFilmMapper());
+        List<Film> films = jdbcTemplate.query(sql, getFilmMapper());
+        List<Film> filmList = new ArrayList<>();
+        for (Film film : films) {
+            film.setGenres(getFilmGenresFromDb(film.getId()));
+            filmList.add(film);
+        }
+        return filmList;
     }
 
     @Override
