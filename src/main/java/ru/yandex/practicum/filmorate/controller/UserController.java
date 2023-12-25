@@ -40,7 +40,7 @@ public class UserController {
     @GetMapping("/users/{id}")
     public User getUserById(@PathVariable int id) {
         log.info("GET /users/{}", id);
-        return userService.getUserByID(id);
+        return userService.getUserById(id);
     }
 
     @PutMapping("/users/{id}/friends/{friendId}")
@@ -61,7 +61,7 @@ public class UserController {
         return userService.getFriends(id);
     }
 
-    @GetMapping("/users/{id}/friends/common/{otherId}")
+    @GetMapping("/users/{id}/friends/common/{otherId}")/////////////////////////////////////////////////////////
     public List<User> getMutualFriends(@PathVariable int id, @PathVariable int otherId) {
         return userService.getMutualFriends(id, otherId);
     }

@@ -1,51 +1,31 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Qualifier("filmDbStorage")
 public class FilmService {
     private final FilmStorage filmStorage;
-    private final UserService userService;
-    public static final Comparator<Film> FILM_COMPARATOR = Comparator.comparingLong(Film::getRate).reversed();
 
     public void addLike(int id, int userId) {
-        Film film = filmStorage.getFilmByID(id);
-        if (film == null) {
-            throw new ObjectNotFoundException(String.format("Фильма с ID=%d не существует", id));
-        }
-
-        if (userService.getUserByID(userId) == null) {
-            throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", userId));
-        }
-        film.addLike(userId);
+        filmStorage.addLike(id, userId);
     }
 
     public void removeLike(int id, int userId) {
-        Film film = filmStorage.getFilmByID(id);
-        if (film == null) {
-            throw new ObjectNotFoundException(String.format("Фильма с ID=%d не существует", id));
-        }
-        if (userService.getUserByID(userId) == null) {
-            throw new ObjectNotFoundException(String.format("Пользователя с ID=%d не существует", userId));
-        }
-
-        film.removeLike(userId);
+        filmStorage.removeLike(id, userId);
     }
 
     public List<Film> getTop10Films(int count) {
-        return filmStorage.getFilm().stream()
-                .sorted(FILM_COMPARATOR)
-                .limit(count)
-                .collect(Collectors.toList());
+        return filmStorage.getPopularFilm(count);
     }
 
     public List<Film> getFilm() {
@@ -66,5 +46,21 @@ public class FilmService {
 
     public Film getFilmByID(Integer id) {
         return filmStorage.getFilmByID(id);
+    }
+
+    public List<Genre> getGenresList() {
+        return filmStorage.getGenresList();
+    }
+
+    public Genre getGenreById(int id) {
+        return filmStorage.getGenreById(id);
+    }
+
+    public List<Mpa> getMpaList() {
+        return filmStorage.getMpaList();
+    }
+
+    public Mpa getMpaById(int id) {
+        return filmStorage.getMpaById(id);
     }
 }
